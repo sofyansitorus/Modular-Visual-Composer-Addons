@@ -280,18 +280,18 @@ if(!class_exists('AVCA_Google_Map')){
 			 * Initialize Map
 			 */
 			$args_map = array();
-			$args_map['coords'] = array('value' => '['.$lat.', '.$lng.']');
+			$args_map['coords'] = array('value' => '['.$lat.', '.$lng.']', 'type' => 'array');
 			if($map_style){
-				$args_map['map_style'] = array('value' => rawurldecode(base64_decode($map_style)));
+				$args_map['map_style'] = array('value' => rawurldecode(base64_decode($map_style)), 'type' => 'array');
 			}
-			$args_map['map_type'] = array('value' => $map_type, 'wrap' => true);
-			$args_map['mapTypeControl'] = array('value' => $maptypecontrol);
-			$args_map['panControl'] = array('value' => $pancontrol);
-			$args_map['streetViewControl'] = array('value' => $streetviewcontrol);
-			$args_map['zoom'] = array('value' => $zoom);
-			$args_map['zoomControl'] = array('value' => $zoomcontrol);
-			$args_map['scrollwheel'] = array('value' => $scrollwheel);
-			$args_map['draggable'] = array('value' => $draggable);					
+			$args_map['map_type'] = array('value' => $map_type);
+			$args_map['mapTypeControl'] = array('value' => $maptypecontrol, 'type' => 'boolean');
+			$args_map['panControl'] = array('value' => $pancontrol, 'type' => 'boolean');
+			$args_map['streetViewControl'] = array('value' => $streetviewcontrol, 'type' => 'boolean');
+			$args_map['zoom'] = array('value' => $zoom, 'type' => 'integer');
+			$args_map['zoomControl'] = array('value' => $zoomcontrol, 'type' => 'boolean');
+			$args_map['scrollwheel'] = array('value' => $scrollwheel, 'type' => 'boolean');
+			$args_map['draggable'] = array('value' => $draggable, 'type' => 'boolean');				
 			$output .= '$("#'.$map_id.'").AVCA_GoogleMap({'."\n";
 			$output .= $this->render_jquery_options($args_map);
 			$output .= '});'."\n";
@@ -300,15 +300,15 @@ if(!class_exists('AVCA_Google_Map')){
 			 * Add Marker
 			 */
 			$args_marker = array();
-			$args_marker['coords'] = array('value' => '['.$lat.', '.$lng.']');
+			$args_marker['coords'] = array('value' => '['.$lat.', '.$lng.']', 'type' => 'array');
 			if($marker_custom_icon){
-				$args_marker['icon'] = array('value' => $marker_custom_icon, 'wrap' => true);
+				$args_marker['icon'] = array('value' => $marker_custom_icon);
 			}
-			$args_marker['animation'] = array('value' => $marker_animation, 'wrap' => true);
-			$args_marker['info_window_type'] = array('value' => $info_window_type, 'wrap' => true);
-			$args_marker['info_window_heading'] = array('value' => $info_window_heading, 'wrap' => true);
-			$args_marker['info_window_address'] = array('value' => $info_window_address, 'wrap' => true);
-			$args_marker['url'] = array('value' => $url, 'wrap' => true);
+			$args_marker['animation'] = array('value' => $marker_animation);
+			$args_marker['info_window_type'] = array('value' => $info_window_type);
+			$args_marker['info_window_heading'] = array('value' => $info_window_heading);
+			$args_marker['info_window_address'] = array('value' => $info_window_address);
+			$args_marker['url'] = array('value' => $url);
 			$output .= '$("#'.$map_id.'").AVCA_AddMapMarker({'."\n";
 			$output .= $this->render_jquery_options($args_marker);
 			$output .= '});'."\n";

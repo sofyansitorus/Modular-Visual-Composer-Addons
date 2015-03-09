@@ -196,10 +196,16 @@ class AVCA {
 			}else{
 				$append = "\n";
 			}
-			if(isset($option['wrap']) && $option['wrap'] == true){
-				$result .= $key.': "'.$option['value'].'"'.$append;
-			}else{
-				$result .= $key.': '.$option['value'].$append;
+			$type = isset($option['type']) ? $option['type'] : 'string';
+			switch ($type) {
+				case 'integer':
+				case 'boolean':
+				case 'array':
+						$result .= $key.': '.$option['value'].$append;
+					break;				
+				default:
+						$result .= $key.': "'.$option['value'].'"'.$append;
+					break;
 			}
 			$i++;
 		}
