@@ -126,6 +126,20 @@ class AVCA {
 	protected function get_module_dir(){
 		return untrailingslashit(plugin_dir_path( __FILE__ )).DIRECTORY_SEPARATOR.self::module_dir;	
 	}
+
+	/**
+	 * Get plugin path
+	 */
+	protected function plugin_dir_path($src=''){
+		return plugin_dir_path(__FILE__) . $src;
+	}
+
+	/**
+	 * Get plugin url
+	 */
+	protected function plugins_url($src=''){
+		return plugins_url($src, __FILE__);
+	}
   
 	/**
 	 * Registers and enqueues scripts
@@ -136,12 +150,12 @@ class AVCA {
 			wp_register_script( $handle, $src, $deps, $ver, $in_footer );
 			wp_enqueue_script( $handle );
 		}else{
-			if( file_exists( plugin_dir_path(__FILE__) . $src ) ) {
-				wp_register_script( $handle, plugins_url($src, __FILE__), $deps, $ver, $in_footer );
+			if( file_exists( $this->plugin_dir_path($src)) ) {
+				wp_register_script( $handle, $this->plugins_url($src), $deps, $ver, $in_footer );
 				wp_enqueue_script( $handle );
-			} // end if
-		} // end if/else
-	} // end register_enqueue_scripts
+			}
+		}
+	}
   
 	/**
 	 * Registers and enqueues styles
@@ -152,12 +166,12 @@ class AVCA {
 			wp_register_style( $handle, $src, $deps, $ver, $media );
 			wp_enqueue_style( $handle );
 		}else{
-			if( file_exists( plugin_dir_path(__FILE__) . $src ) ) {
-				wp_register_style( $handle, plugins_url($src, __FILE__), $deps, $ver, $media );
+			if( file_exists( $this->plugin_dir_path($src)) ) {
+				wp_register_style( $handle, $this->plugins_url($src), $deps, $ver, $media );
 				wp_enqueue_style( $handle );
-			} // end if
-		} // end if/else
-	} // end register_enqueue_scripts
+			}
+		}
+	}
   
 	/**
 	 * Runs when the plugin is activated
