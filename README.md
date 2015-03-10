@@ -3,7 +3,7 @@
 
 ### Features:  
 1. Advanced google map
-1. Custom Heading with Icon (Commin soon)
+1. Custom Heading with Icon (Coming soon)
 
 **How to install Advanced addons for Visual Composer wordpress plugin**
 
