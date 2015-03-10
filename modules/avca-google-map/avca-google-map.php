@@ -5,17 +5,29 @@ if(!class_exists('AVCA_Google_Map')){
 		private $base = 'avca_google_map';
 
 		function __construct(){
-			add_action('init',array($this,'avca_init'));
-			add_action('wp_enqueue_scripts', array($this, 'avca_enqueue_scripts'),1);
-			add_shortcode($this->base,array($this,'avca_build_shortcode'));
+			add_action('init',array($this,'init'));
+			add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'),1);
+			add_shortcode($this->base,array($this,'build_shortcode'));
 		}
-		function avca_enqueue_scripts(){
+
+		function enqueue_scripts(){
+			global $wp_scripts;
+			$google_map_api_registered = false;
+			foreach ($wp_scripts as $registered_script) {
+				if(strpos($registered_script->src, 'maps.googleapis.com') !== FALSE){
+					$google_map_api_registered = true;
+					break;
+				}
+			}
 			$this->register_enqueue_styles('avca-google-map', 'modules/avca-google-map/assets/css/avca-google-map.css');
-			$this->register_enqueue_scripts('maps.googleapis.com','//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false',array('jquery'),'3.0',false);
+			if(!$google_map_api_registered){
+				$this->register_enqueue_scripts('maps.googleapis.com','//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false',array('jquery'),'3.0',false);
+			}
 			$this->register_enqueue_scripts('infobox', 'modules/avca-google-map/assets/js/infobox.js',array('jquery', 'maps.googleapis.com'),'3.0',false);
 			$this->register_enqueue_scripts('avca-google-map', 'modules/avca-google-map/assets/js/avca-google-map.js',array('jquery', 'maps.googleapis.com'),'3.0',false);
 		}
-		function avca_init(){
+		
+		function init(){
 			vc_map( array(
 				'name' => __('AVCA Google Map', self::slug),
 				'base' => $this->base,
@@ -204,8 +216,9 @@ if(!class_exists('AVCA_Google_Map')){
 			)
 			);
 		}
-		function avca_build_shortcode($atts,$content = null){			
-			
+
+		function build_shortcode($atts,$content = null){	
+					
 			extract(shortcode_atts(array(
 				'width' => '100%',
 				'height' => '300px',

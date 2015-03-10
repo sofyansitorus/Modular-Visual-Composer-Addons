@@ -12,7 +12,8 @@
  * GitHub Plugin URI: https://github.com/sofyansitorus/Advanced-Visual-Composer-Addons
  */
 
-class AVCA {
+// Register the autoload function
+class AVCA{
 
 	/*--------------------------------------------*
 	 * Constants
@@ -112,6 +113,57 @@ class AVCA {
 			}
 		}		
 	}
+  
+	/**
+	 * Runs when the plugin is activated
+	 */  
+	public function activation_hook() {
+
+		// Check dependencise
+		if( !$this->is_vc_activated() ) {
+			die(sprintf(__('You must install and activate <a href="%s" target="_blank">WPBakery Visual Composer</a> plugin before activating this plugin.', self::slug), self::aff_link));
+		}
+		
+
+		//Check compatibility
+		if( !$this->is_vc_version_compatible() ) {
+			die(sprintf(__('This plugin requires <a href="%s" target="_blank">WPBakery Visual Composer</a> plugin version %s or greater', self::slug), self::aff_link, self::min_vc_version));
+		}
+	}
+  
+	/**
+	 * Runs when the plugin is deactivated
+	 */  
+	public function deactivation_hook() {
+		// do not generate any output here
+	}
+
+  
+	/**
+	 * Check if VC plugin is activated
+	 */  
+	private function is_vc_activated() {
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		return is_plugin_active( 'js_composer/js_composer.php' );
+	}
+  
+	/**
+	 * Check if VC plugin version is compatible
+	 */  
+	private function is_vc_version_compatible() {
+		return version_compare(WPB_VC_VERSION,  self::min_vc_version, '>');
+	}
+  
+	/**
+	 * Add extra actions link for the plugin
+	 */
+
+	public function plugin_row_meta( $links, $file ) {
+		if (strpos( $file, basename( __FILE__) ) !== false ) {
+			$links[] = sprintf(__('<a href="%s" target="_blank">Buy WPBakery Visual Composer</a>', self::slug), self::aff_link);
+		}
+		return $links;
+	}
 
 	/**
 	 * Get params directory
@@ -172,30 +224,6 @@ class AVCA {
 			}
 		}
 	}
-  
-	/**
-	 * Runs when the plugin is activated
-	 */  
-	public function activation_hook() {
-
-		// Check dependencise
-		if( !$this->is_vc_activated() ) {
-			die(sprintf(__('You must install and activate <a href="%s" target="_blank">WPBakery Visual Composer</a> plugin before activating this plugin.', self::slug), self::aff_link));
-		}
-		
-
-		//Check compatibility
-		if( !$this->is_vc_version_compatible() ) {
-			die(sprintf(__('This plugin requires <a href="%s" target="_blank">WPBakery Visual Composer</a> plugin version %s or greater', self::slug), self::aff_link, self::min_vc_version));
-		}
-	}
-  
-	/**
-	 * Runs when the plugin is deactivated
-	 */  
-	public function deactivation_hook() {
-		// do not generate any output here
-	}
 
 	/**
 	 * Render jQuery options
@@ -224,32 +252,6 @@ class AVCA {
 			$i++;
 		}
 		return $result;
-	}
-  
-	/**
-	 * Check if VC plugin is activated
-	 */  
-	private function is_vc_activated() {
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		return is_plugin_active( 'js_composer/js_composer.php' );
-	}
-  
-	/**
-	 * Check if VC plugin version is compatible
-	 */  
-	private function is_vc_version_compatible() {
-		return version_compare(WPB_VC_VERSION,  self::min_vc_version, '>');
-	}
-  
-	/**
-	 * Add extra actions link for the plugin
-	 */
-
-	function plugin_row_meta( $links, $file ) {
-		if (strpos( $file, basename( __FILE__) ) !== false ) {
-			$links[] = sprintf(__('<a href="%s" target="_blank">Buy WPBakery Visual Composer</a>', self::slug), self::aff_link);
-		}
-		return $links;
 	}
   
 } // end class
