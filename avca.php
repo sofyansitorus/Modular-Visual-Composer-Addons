@@ -12,7 +12,6 @@
  * GitHub Plugin URI: https://github.com/sofyansitorus/Advanced-Visual-Composer-Addons
  */
 
-// Register the autoload function
 class AVCA{
 
 	/*--------------------------------------------*
