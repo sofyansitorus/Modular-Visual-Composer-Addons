@@ -20,7 +20,7 @@ class AVCA{
 	const name = 'Advanced Visual Composer Addons';
 	const category = 'AVCA';
 	const slug = 'avca';
-	const ver = '0.1';
+	const version = '0.1';
 	const min_vc_version = '4.0';
 	const param_dir = 'params';
 	const module_dir = 'modules';
@@ -56,14 +56,14 @@ class AVCA{
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2);
 
 		//run the plugin
-		add_action( 'plugins_loaded', array($this, 'run') );
+		add_action( 'plugins_loaded', array($this, 'init') );
 
 	}
 
 	/**
 	 * Run plugins
 	 */
-	public function run(){
+	public function init(){
 
 		// Check dependencies
 		if(!$this->is_vc_activated()) return false;
