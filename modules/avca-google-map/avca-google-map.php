@@ -42,8 +42,8 @@ if(!class_exists('AVCA_Google_Map')){
 						'heading' => __('Latitude', self::slug),
 						'param_name' => 'lat',
 						'admin_label' => true,
-						'value' => '',
-						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to find Latitude of your location', self::slug), 'http://www.mapcoordinates.net/en'),
+						'value' => '-6.175392',
+						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to find Latitude of your location.', self::slug), 'http://www.mapcoordinates.net/en'),
 						'group' => __('General Settings', self::slug)
 					),
 					array(
@@ -51,8 +51,8 @@ if(!class_exists('AVCA_Google_Map')){
 						'heading' => __('Longitude', self::slug),
 						'param_name' => 'lng',
 						'admin_label' => true,
-						'value' => '',
-						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to find Longitude of your location', self::slug), 'http://www.mapcoordinates.net/en'),
+						'value' => '106.827153',
+						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to find Longitude of your location.', self::slug), 'http://www.mapcoordinates.net/en'),
 						'group' => __('General Settings', self::slug)
 					),
 					array(
@@ -61,76 +61,48 @@ if(!class_exists('AVCA_Google_Map')){
 						'param_name' => 'zoom',
 						'admin_label' => true,
 						'value' => $this->get_values_zoom(),
+						'std' => 16,
+						'group' => __('General Settings', self::slug)
+					),
+					array(
+						'type' => 'textfield',
+						'heading' => __('Width', self::slug),
+						'description' => __('Set your map width in % or px. Default is %.', self::slug),
+						'param_name' => 'width',
+						'admin_label' => true,
+						'value' => '100%',
+						'group' => __('General Settings', self::slug)
+					),
+					array(
+						'type' => 'textfield',
+						'heading' => __('Height', self::slug),
+						'description' => __('Set your map width in % or px. Default is px.', self::slug),
+						'param_name' => 'height',
+						'admin_label' => true,
+						'value' => '300px',
 						'group' => __('General Settings', self::slug)
 					),
 					array(
 						'type' => 'dropdown',
-						'class' => '',
-						'heading' => __('Marker Icon', self::slug),
-						'param_name' => 'marker',
-						'value' => array(__('Default', self::slug) => 'default', __('Custom', self::slug) => 'custom'),
-						'group' => __('Marker', self::slug)
+						'heading' => __('Map Type', self::slug),
+						'param_name' => 'map_type',
+						'admin_label' => true,
+						'value' => array(__('Roadmap', self::slug) => 'ROADMAP', __('Satellite', self::slug) => 'SATELLITE', __('Hybrid', self::slug) => 'HYBRID', __('Terrain', self::slug) => 'TERRAIN'),
+						'group' => __('General Settings', self::slug)
 					),
 					array(
-						'type' => 'attach_image',
+						'type' => 'textarea_raw_html',
 						'class' => '',
-						'param_name' => 'marker_custom_icon',
+						'heading' => __('Google Styled Map JSON', self::slug),
+						'param_name' => 'map_style',
 						'value' => '',
-						'description' => __('Upload the custom marker icon.', self::slug),
-						'dependency' => Array('element' => 'marker','value' => array('custom')),
-						'group' => __('Marker', self::slug)
+						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to get the style JSON code for styling your map.', self::slug), 'https://snazzymaps.com/'),
+						'dependency' => Array('element' => 'map_type','value' => array('ROADMAP')),
+						'group' => __('General Settings', self::slug)
 					),
 					array(
 						'type' => 'dropdown',
-						'class' => '',
-						'heading' => __('Marker Icon Animation', self::slug),
-						'param_name' => 'marker_animation',
-						'value' => array(__('Disabled', self::slug) => '', __('Bounce', self::slug) => 'BOUNCE', __('Drop', self::slug) => 'DROP'),
-						'group' => __('Marker', self::slug)
-					),
-					array(
-						'type' => 'dropdown',
-						'class' => '',
-						'heading' => __('Marker Icon Click', self::slug),
-						'param_name' => 'marker_click',
-						'value' => array(__('Do Nothing', self::slug) => '', __('Redirect to URL', self::slug) => 'url', __('Show Info Window', self::slug) => 'info_window'),
-						'group' => __('Marker', self::slug)
-					),
-					array(
-						'type' => 'vc_link',
-						'param_name' => 'url',
-						'value' => '',
-						'dependency' => Array('element' => 'marker_click','value' => array('url')),
-						'group' => __('Marker', self::slug)
-					),
-					array(
-						'type' => 'dropdown',
-						'class' => '',
-						'heading' => __('Type', self::slug),
-						'param_name' => 'info_window_type',
-						'value' => array(__('Default', self::slug) => 'default', __('Custom', self::slug) => 'custom'),
-						'dependency' => Array('element' => 'marker_click','value' => array('info_window')),
-						'group' => __('Info Window', self::slug)
-					),
-					array(
-						'type' => 'textfield',
-						'heading' => __('Heading', self::slug),
-						'param_name' => 'info_window_heading',
-						'value' => '',
-						'dependency' => Array('element' => 'marker_click','value' => array('info_window')),
-						'group' => __('Info Window', self::slug)
-					),
-					array(
-						'type' => 'textarea',
-						'heading' => __('Address', self::slug),
-						'param_name' => 'info_window_address',
-						'value' => '',
-						'dependency' => Array('element' => 'marker_click','value' => array('info_window')),
-						'group' => __('Info Window', self::slug)
-					),
-					array(
-						'type' => 'dropdown',
-						'heading' => __('Map Type Control', self::slug),
+						'heading' => __('Type Control', self::slug),
 						'param_name' => 'maptypecontrol',
 						'value' => array(__('Disable', self::slug) => 'false', __('Enable', self::slug) => 'true'),
 						'group' => __('Map Control', self::slug)
@@ -138,7 +110,7 @@ if(!class_exists('AVCA_Google_Map')){
 					array(
 						'type' => 'dropdown',
 						'class' => '',
-						'heading' => __('Map Pan Control', self::slug),
+						'heading' => __('Pan Control', self::slug),
 						'param_name' => 'pancontrol',
 						'value' => array(__('Disable', self::slug) => 'false', __('Enable', self::slug) => 'true'),
 						'group' => __('Map Control', self::slug)
@@ -177,41 +149,80 @@ if(!class_exists('AVCA_Google_Map')){
 						'group' => __('Map Control', self::slug)
 					),
 					array(
-						'type' => 'textfield',
-						'heading' => __('Width', self::slug),
-						'description' => __('Set your map width in % or px. Default is %.', self::slug),
-						'param_name' => 'width',
-						'admin_label' => true,
-						'value' => '100%',
-						'group' => __('Styling', self::slug)
+						'type' => 'dropdown',
+						'class' => '',
+						'heading' => __('Icon', self::slug),
+						'param_name' => 'marker',
+						'value' => array(__('Default', self::slug) => 'default', __('Custom', self::slug) => 'custom'),
+						'group' => __('Marker', self::slug)
 					),
 					array(
-						'type' => 'textfield',
-						'heading' => __('Height', self::slug),
-						'description' => __('Set your map width in % or px. Default is px.', self::slug),
-						'param_name' => 'height',
-						'admin_label' => true,
-						'value' => '300px',
-						'group' => __('Styling', self::slug)
+						'type' => 'attach_image',
+						'class' => '',
+						'param_name' => 'marker_custom_icon',
+						'value' => '',
+						'description' => __('Upload the custom marker icon.', self::slug),
+						'dependency' => Array('element' => 'marker','value' => array('custom')),
+						'group' => __('Marker', self::slug)
 					),
 					array(
 						'type' => 'dropdown',
-						'heading' => __('Map Type', self::slug),
-						'param_name' => 'map_type',
-						'admin_label' => true,
-						'value' => array(__('Roadmap', self::slug) => 'ROADMAP', __('Satellite', self::slug) => 'SATELLITE', __('Hybrid', self::slug) => 'HYBRID', __('Terrain', self::slug) => 'TERRAIN'),
-						'group' => __('Styling', self::slug)
+						'class' => '',
+						'heading' => __('Animation', self::slug),
+						'param_name' => 'marker_animation',
+						'value' => array(__('Disabled', self::slug) => '', __('Bounce', self::slug) => 'BOUNCE', __('Drop', self::slug) => 'DROP'),
+						'group' => __('Marker', self::slug)
 					),
 					array(
-						'type' => 'textarea_raw_html',
+						'type' => 'dropdown',
 						'class' => '',
-						'heading' => __('Google Styled Map JSON', self::slug),
-						'param_name' => 'map_style',
+						'Status' => __('Type', self::slug),
+						'param_name' => 'info_window',
+						'value' => array(__('Disabled', self::slug) => '', __('Always Visible', self::slug) => 'always', __('On Marker Click', self::slug) => 'onclick'),
+						'group' => __('Info Window', self::slug)
+					),
+					array(
+						'type' => 'textarea_html',
+						'heading' => __('Content', self::slug),
+						'param_name' => 'content',
 						'value' => '',
-						'description' => sprintf(__('<a href="%s" target="_blank">Click here</a> to get the style JSON code for styling your map.', self::slug), 'https://snazzymaps.com/'),
-						'dependency' => Array('element' => 'map_type','value' => array('ROADMAP')),
-						'group' => __('Styling', self::slug)
-					)
+						'dependency' => Array('element' => 'info_window','value' => array('always','onclick')),
+						'group' => __('Info Window', self::slug)
+					),
+					array(
+						'type' => 'dropdown',
+						'class' => '',
+						'heading' => __('Type', self::slug),
+						'param_name' => 'info_window_type',
+						'value' => array(__('Default', self::slug) => 'default', __('Custom', self::slug) => 'custom'),
+						'dependency' => Array('element' => 'info_window','value' => array('always','onclick')),
+						'group' => __('Info Window', self::slug)
+					),
+					array(
+						'type' => 'textfield',
+						'heading' => __('Horizontal Offset Position', self::slug),
+						'description' => __('Negative number is allowed. Default is 0.', self::slug),
+						'param_name' => 'info_window_h_offset',
+						'value' => '0',
+						'group' => __('Info Window', self::slug),
+			            'dependency' => Array('element' => 'info_window_type','value' => array('custom')),
+					),
+					array(
+						'type' => 'textfield',
+						'heading' => __('Vertical Offset Position', self::slug),
+						'description' => __('Negative number is allowed. Default is 0.', self::slug),
+						'param_name' => 'info_window_v_offset',
+						'value' => '0',
+						'group' => __('Info Window', self::slug),
+			            'dependency' => Array('element' => 'info_window_type','value' => array('custom')),
+					),
+					array(
+			            'type' => 'css_editor',
+			            'heading' => __( 'Css', self::slug),
+			            'param_name' => 'info_window_class',
+			            'group' => __( 'Info Window', self::slug),
+			            'dependency' => Array('element' => 'info_window_type','value' => array('custom')),
+			        )
 				)
 			)
 			);
@@ -220,12 +231,13 @@ if(!class_exists('AVCA_Google_Map')){
 		function build_shortcode($atts,$content = null){	
 					
 			extract(shortcode_atts(array(
+				'lat' => '-6.175392',
+				'lng' => '106.827153',
+				'zoom' => '16',
 				'width' => '100%',
 				'height' => '300px',
-				'lat' => '18.591212',
-				'lng' => '73.741261',
 				'map_type' => 'ROADMAP',
-				'zoom' => '14',
+				'map_style' => '',
 				'streetviewcontrol' => 'false',
 				'maptypecontrol' => 'false',
 				'pancontrol' => 'false',
@@ -235,17 +247,16 @@ if(!class_exists('AVCA_Google_Map')){
 				'marker' => 'default',
 				'marker_custom_icon' => '',
 				'marker_animation' => '',
-				'marker_click' => '',
-				'url' => '',
 				'info_window' => '',
+				'info_window_text' => '',
 				'info_window_type' => '',
-				'info_window_heading' => '',
-				'info_window_address' => '',
-				'map_style' => ''
+				'info_window_h_offset' => 0,
+				'info_window_v_offset' => 0,
+				'info_window_class' => ''
 			), $atts));
 
-			$map_width = (substr($width, -1) != '%' && substr($width, -2)!='px' ? $width . '%' : $width);
-			$map_height = (substr($height, -1) != '%' && substr($height, -2)!='px' ? $height . 'px' : $height);
+			$width = (substr($width, -1) != '%' && substr($width, -2)!='px' ? $width . '%' : $width);
+			$height = (substr($height, -1) != '%' && substr($height, -2)!='px' ? $height . 'px' : $height);
 
 			if($marker == "default"){
 				$marker_custom_icon = '';
@@ -256,35 +267,11 @@ if(!class_exists('AVCA_Google_Map')){
 				}
 			}
 
-			switch ($marker_click) {
-				case 'url':
-						$link = vc_build_link( $url );
-						if($link){
-							$url = $link['url'];
-						}
-						$info_window_heading = '';
-						$info_window_address = '';
-					break;
-				case 'info_window':
-						if($info_window_heading){
-							$info_window_heading = strip_tags($info_window_heading);
-						}
-						if($info_window_address){
-							$info_window_address = preg_replace('#\R+#', '<br />', strip_tags($info_window_address));
-						}
-						$url = '';
-					break;
-				
-				default:
-						$url = '';
-						$info_window_heading = '';
-						$info_window_address = '';
-					break;
-			}
+			$info_window_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $info_window_class, '' ), $this->base, $atts );
 
 			$map_id = $this->get_map_id();
 
-			$output = '<div id="'.$map_id.'" class="advanced-map-wrapper" style="width:'.$map_width.';height:'.$height.';"></div>'."\n";
+			$output = '<div id="'.$map_id.'" class="advanced-map-wrapper" style="width:'.$width.';height:'.$height.';"></div>'."\n";
 
 			$output .= '<script type="text/javascript">'."\n";
 			$output .= '(function($) {'."\n";
@@ -318,10 +305,16 @@ if(!class_exists('AVCA_Google_Map')){
 				$args_marker['icon'] = array('value' => $marker_custom_icon);
 			}
 			$args_marker['animation'] = array('value' => $marker_animation);
-			$args_marker['info_window_type'] = array('value' => $info_window_type);
-			$args_marker['info_window_heading'] = array('value' => $info_window_heading);
-			$args_marker['info_window_address'] = array('value' => $info_window_address);
-			$args_marker['url'] = array('value' => $url);
+			$content = wpb_js_remove_wpautop( $content, true );
+			if($info_window && $content){
+				$args_marker['info_window'] = array('value' => $info_window);
+				$args_marker['info_window_text'] = array('value' => addslashes(preg_replace('#\R+#', '', $content)));
+				$args_marker['info_window_type'] = array('value' => $info_window_type);
+				$args_marker['info_window_h_offset'] = array('value' => (int)$info_window_h_offset, 'type' => 'integer');
+				$args_marker['info_window_v_offset'] = array('value' => (int)$info_window_v_offset, 'type' => 'integer');
+				$args_marker['info_window_class'] = array('value' => $info_window_class);
+			}
+
 			$output .= '$("#'.$map_id.'").AVCA_AddMapMarker({'."\n";
 			$output .= $this->render_jquery_options($args_marker);
 			$output .= '});'."\n";

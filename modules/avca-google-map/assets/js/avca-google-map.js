@@ -12,7 +12,7 @@
 
     $.fn.AVCA_GoogleMap = function(settings) {
         var params = $.extend({
-            coords: [48.895651, 2.290569],
+            coords: [-6.175392, 106.827153],
             map_type: "ROADMAP",
             debug: false,
             map_style: "",
@@ -68,13 +68,17 @@
             coords: false,
             id: false,
             icon: false,
-            draggable: false,
-            info_window_type: "default",
-            info_window_heading: "",
-            info_window_address: "",
-            url: false,
             animation: false,
-            success: function() {}
+            draggable: false,
+            info_window: "always",
+            info_window_text: "",
+            info_window_type: "default",
+            info_window_h_offset: 0,
+            info_window_v_offset: 0,
+            info_window_class: "",
+            success: function() {
+
+            }
         }, settings);
 
         this.each(function() {
@@ -122,23 +126,16 @@
                     break;
             }
 
-            if (params.info_window_heading != "" || params.info_window_address != "") {
-                var info_window_content;
-                var pixelOffset = 0;
+            if (params.info_window != "" || params.info_window_text != "") {
+                
                 if(params.info_window_type == 'custom' && typeof InfoBox == 'function'){
-                    info_window_content = "<div class=\"info-window-custom\"'>";
-                    if (params.info_window_heading != "") {
-                        info_window_content = info_window_content + "<div class=\"info-window-heading\"'>" + params.info_window_heading + "</div>";
-                        pixelOffset = pixelOffset - 60;
-                    }
-                    if (params.info_window_address != "") {
-                        info_window_content = info_window_content + "<div class=\"info-window-address\"'>" + params.info_window_address + "</div>";
-                        pixelOffset = pixelOffset - 100;
-                    }
-                    info_window_content = info_window_content + "</div>";
+                    var map = $this.data('googleMap');
+                    var info_window_content = "<div class=\"info-window-custom "+params.info_window_class+"\">" + params.info_window_text + "</div>";
                     var InfoBoxOptions = {
+                        boxClass: "",
+                        boxStyle:{},
                         alignBottom: true,
-                        pixelOffset: new google.maps.Size(-36, pixelOffset),
+                        pixelOffset: new google.maps.Size(params.info_window_h_offset, params.info_window_v_offset),
                         disableAutoPan: true,
                         enableEventPropagation: true,
                         closeBoxURL: '',
@@ -149,39 +146,27 @@
                         content: info_window_content
                     };
                     var ib = new InfoBox(InfoBoxOptions);
-                    marker.infobox = false;
-                    google.maps.event.addListener(marker, 'click', function() {
-                        if(marker.infobox){
-                            ib.close();
-                            marker.infobox = false;
-                        }else{
-                            ib.open($this.data('googleMap'), marker);
-                            marker.infobox = true;
-                        }
-                    });
+                    if(params.info_window == 'always'){
+                        ib.open(map, marker);
+                    }else{
+                        google.maps.event.addListener(marker, 'click', function() {
+                           ib.open(map, marker);
+                        });                        
+                    }
                 }else{
-                    info_window_content = "<div class=\"info-window-default\"'>";
-                    if (params.info_window_heading != "") {
-                        info_window_content = info_window_content + "<div class=\"info-window-heading\"'>" + params.info_window_heading + "</div>";
-                    }
-                    if (params.info_window_address != "") {
-                        info_window_content = info_window_content + "<div class=\"info-window-address\"'>" + params.info_window_address + "</div>";
-                    }
-                    info_window_content = info_window_content + "</div>";
+                    var map = $this.data('googleMap');
+                    var info_window_content = "<div class=\"info-window-default\">" + params.info_window_text + "</div>";
                     var infowindow = new google.maps.InfoWindow({
                         content: info_window_content
                     });
-
-                    var map = $this.data('googleMap');
-
-                    google.maps.event.addListener(marker, 'click', function() {
+                    if(params.info_window == 'always'){
                         infowindow.open(map, marker);
-                    });
+                    }else{
+                        google.maps.event.addListener(marker, 'click', function() {
+                            infowindow.open(map, marker);
+                        });                        
+                    }
                 }
-            }else if (params.url) {
-                google.maps.event.addListener(marker, 'click', function() {
-                    document.location = params.url;
-                });
             }
 
             if (!params.id) {
