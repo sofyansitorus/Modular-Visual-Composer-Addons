@@ -70,7 +70,7 @@
             icon: false,
             animation: false,
             draggable: false,
-            info_window: "always",
+            info_window: "",
             info_window_text: "",
             info_window_type: "default",
             info_window_h_offset: 0,
