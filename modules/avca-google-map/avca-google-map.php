@@ -12,6 +12,9 @@ if(!class_exists('AVCA_Google_Map')){
 
 		function enqueue_scripts(){
 			global $wp_scripts;
+
+			$this->register_enqueue_styles('avca-google-map', 'modules/avca-google-map/assets/css/avca-google-map.css');
+			
 			$google_map_api_registered = false;
 			foreach ($wp_scripts as $registered_script) {
 				if(isset($registered_script->src)){
@@ -21,7 +24,6 @@ if(!class_exists('AVCA_Google_Map')){
 					}					
 				}
 			}
-			$this->register_enqueue_styles('avca-google-map', 'modules/avca-google-map/assets/css/avca-google-map.css');
 			if(!$google_map_api_registered){
 				$this->register_enqueue_scripts('maps.googleapis.com','//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false',array('jquery'),'3.0',false);
 			}
