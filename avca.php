@@ -96,7 +96,7 @@ class AVCA{
 		foreach(glob($this->get_param_dir()."/*", GLOB_ONLYDIR) as $dir){
 			$param_file = trailingslashit($dir).basename($dir).'.php';
 			if(file_exists($param_file)){
-				require_once($param_file);
+				//require_once($param_file);
 			}
 		}
 	}
