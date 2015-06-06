@@ -20,4 +20,4 @@
  - Enable elements as modules
  - Tweak enqueue script on page only on page that has shortcode for module
  - Tweak Google Map Shortcode to enable redirect to url on marker click
- - Add new Element: **Formidable form selector**`enter code here`
+ - Add new Element: **Formidable form selector**
