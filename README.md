@@ -18,6 +18,6 @@
 07.06.2015 - ver 1.0.0
 
  - Enable elements as modules
- - Tweak enqueue script on page only on page that has shortcode for module
+ - Tweak enqueue script method to enqueue scripts and stles only on page that has shortcode for current module
  - Tweak Google Map Shortcode to enable redirect to url on marker click
  - Add new Element: **Formidable form selector**
