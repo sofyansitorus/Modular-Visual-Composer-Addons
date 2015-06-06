@@ -15,7 +15,7 @@
 
 **Change Log**
 
-06.07.2015 - ver 1.0.0
+07.06.2015 - ver 1.0.0
 
  - Enable elements as modules
  - Tweak enqueue script on page only on page that has shortcode for module
