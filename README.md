@@ -4,6 +4,7 @@
 ### Features & Elements:  
 1. Advanced google map
 1. Formidable form
+1. Vertical Timeline (Coming soon)
 
 **How to install Advanced addons for Visual Composer wordpress plugin**
 
