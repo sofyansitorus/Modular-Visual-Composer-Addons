@@ -3,7 +3,7 @@
 
 ### Features:  
 1. Advanced google map
-1. Custom Heading with Icon (Coming soon)
+1. Formidable form
 
 **How to install Advanced addons for Visual Composer wordpress plugin**
 
@@ -12,3 +12,12 @@
 1. With your FTP program, upload the Plugin folder to the wp-content/plugins folder in your WordPress directory online.
 1. Go to Plugins screen and find the newly uploaded Plugin in the list.
 1. Click Activate Plugin to activate it.
+
+**Change Log**
+
+06.07.2015 - ver 1.0.0
+
+ - Enable elements as modules
+ - Tweak enqueue script on page only on page that has shortcode for module
+ - Tweak Google Map Shortcode to enable redirect to url on marker click
+ - Add new Element: **Formidable form selector**`enter code here`
