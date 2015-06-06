@@ -70,6 +70,8 @@
             icon: false,
             animation: false,
             draggable: false,
+            marker_onclick: "",
+            redirect_url: "",
             info_window: "",
             info_window_text: "",
             info_window_type: "default",
@@ -126,45 +128,83 @@
                     break;
             }
 
-            if (params.info_window != "" || params.info_window_text != "") {
+            switch (params.marker_onclick) {
+                case 'enabled_redirect':
+                    google.maps.event.addListener(marker, 'click', function() {
+                        document.location = params.redirect_url;
+                    });
+                    break;
+                case 'toggle_infowindow':
+                        if (params.info_window_text != "") {
                 
-                if(params.info_window_type == 'custom' && typeof InfoBox == 'function'){
-                    var map = $this.data('googleMap');
-                    var info_window_content = "<div class=\"info-window-custom "+params.info_window_class+"\">" + params.info_window_text + "</div>";
-                    var InfoBoxOptions = {
-                        boxClass: "",
-                        boxStyle:{},
-                        alignBottom: true,
-                        pixelOffset: new google.maps.Size(params.info_window_h_offset, params.info_window_v_offset),
-                        disableAutoPan: true,
-                        enableEventPropagation: true,
-                        closeBoxURL: '',
-                        infoBoxClearance: new google.maps.Size(1, 1),
-                        maxWidth: 0,
-                        pane: "floatPane",
-                        zIndex: 9999,
-                        content: info_window_content
-                    };
-                    var ib = new InfoBox(InfoBoxOptions);
-                    if(params.info_window == 'always'){
+                            if(params.info_window_type == 'custom' && typeof InfoBox == 'function'){
+                                var map = $this.data('googleMap');
+                                var info_window_content = "<div class=\"info-window-custom "+params.info_window_class+"\">" + params.info_window_text + "</div>";
+                                var InfoBoxOptions = {
+                                    boxClass: "",
+                                    boxStyle:{},
+                                    alignBottom: true,
+                                    pixelOffset: new google.maps.Size(params.info_window_h_offset, params.info_window_v_offset),
+                                    disableAutoPan: true,
+                                    enableEventPropagation: true,
+                                    closeBoxURL: '',
+                                    infoBoxClearance: new google.maps.Size(1, 1),
+                                    maxWidth: 0,
+                                    pane: "floatPane",
+                                    zIndex: 9999,
+                                    content: info_window_content
+                                };
+                                var ib = new InfoBox(InfoBoxOptions);
+                                ib.open(map, marker); 
+                                google.maps.event.addListener(marker, 'click', function() {
+                                   ib.open(map, marker);
+                                });
+                            }else{
+                                var map = $this.data('googleMap');
+                                var info_window_content = "<div class=\"info-window-default\">" + params.info_window_text + "</div>";
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: info_window_content
+                                });
+                                infowindow.open(map, marker); 
+                                google.maps.event.addListener(marker, 'click', function() {
+                                    infowindow.open(map, marker);
+                                });
+                            }
+                        }
+                    break;
+                default:
+                    // Do nothing
+                    break;
+            }
+
+            var show_infowindow = function() {
+                if (params.info_window_text != "") {
+                    if(params.info_window_type == 'custom' && typeof InfoBox == 'function'){
+                        var map = $this.data('googleMap');
+                        var info_window_content = "<div class=\"info-window-custom "+params.info_window_class+"\">" + params.info_window_text + "</div>";
+                        var InfoBoxOptions = {
+                            boxClass: "",
+                            boxStyle:{},
+                            alignBottom: true,
+                            pixelOffset: new google.maps.Size(params.info_window_h_offset, params.info_window_v_offset),
+                            disableAutoPan: true,
+                            enableEventPropagation: true,
+                            closeBoxURL: '',
+                            infoBoxClearance: new google.maps.Size(1, 1),
+                            maxWidth: 0,
+                            pane: "floatPane",
+                            zIndex: 9999,
+                            content: info_window_content
+                        };
+                        var ib = new InfoBox(InfoBoxOptions);
                         ib.open(map, marker);
                     }else{
-                        google.maps.event.addListener(marker, 'click', function() {
-                           ib.open(map, marker);
-                        });                        
-                    }
-                }else{
-                    var map = $this.data('googleMap');
-                    var info_window_content = "<div class=\"info-window-default\">" + params.info_window_text + "</div>";
-                    var infowindow = new google.maps.InfoWindow({
-                        content: info_window_content
-                    });
-                    if(params.info_window == 'always'){
+                        var map = $this.data('googleMap');
+                        var info_window_content = "<div class=\"info-window-default\">" + params.info_window_text + "</div>";
+                        var infowindow = new google.maps.InfoWindow({
+                            content: info_window_content
+                        });
                         infowindow.open(map, marker);
-                    }else{
-                        google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.open(map, marker);
-                        });                        
                     }
                 }
             }
