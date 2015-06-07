@@ -104,18 +104,31 @@ class AVCA{
 	}
 
 	public function admin_init(){
-		if($this->_module){
+		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : false;
+		if($nonce){
 			switch ($this->_action) {
 
 				case 'activate':
-						if( check_admin_referer( 'activate_module' ) ) {
+						if( wp_verify_nonce( $nonce, 'activate_module' ) && $this->_module ) {
 							$this->activate_module($this->_module);
+						}else{
+							wp_die( __('Invalid request!', AVCA_SLUG) );
 						}
 					break;
 
 				case 'deactivate':
-						if( check_admin_referer( 'deactivate_module' ) ) {
+						if( wp_verify_nonce( $nonce, 'deactivate_module' ) && $this->_module ) {
 							$this->deactivate_module($this->_module);
+						}else{
+							wp_die( __('Invalid request!', AVCA_SLUG) );
+						}
+					break;
+
+				case 'flush_modules':
+						if( wp_verify_nonce( $nonce, 'flush_modules' ) ) {
+							$this->flush_modules();
+						}else{
+							wp_die( __('Invalid request!', AVCA_SLUG) );
 						}
 					break;
 				
@@ -148,6 +161,12 @@ class AVCA{
 				        echo "</p></div>";
 			    	}
 				break;
+
+			case 'flush_modules':
+					echo '<div class="updated"><p>'; 
+				    echo __('Modules flushed.', AVCA_SLUG);
+				    echo "</p></div>";
+				break;
 			
 			default:
 				# code...
@@ -176,7 +195,7 @@ class AVCA{
 	public function render_admin_page(){
 	?>
 	<div class="wrap">
-	<h2><?php echo $this->_plugin_data['Name']; ?></h2>
+	<h2><?php echo $this->_plugin_data['Name']; ?><a href="<?php echo wp_nonce_url(add_query_arg(array('page' => AVCA_SLUG, 'action' => 'flush_modules'), admin_url( 'admin.php' ) ), 'flush_modules'); ?>" class="add-new-h2"><?php _e('Flush Modules', AVCA_SLUG); ?></a></h2>
 	<ul class="subsubsub">
 		<li class="all"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG), admin_url( 'admin.php' )) ;?>">All <span class="count">(<?php echo count($this->_modules_installed); ?>)</span></a> |</li>
 		<li class="active"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG, 'filter' => 'active'), admin_url( 'admin.php' )) ;?>">Active <span class="count">(<?php echo count($this->_modules_activated); ?>)</span></a> |</li>
@@ -348,6 +367,17 @@ class AVCA{
 				unset($this->_modules_activated[$key]);
 			}
 		}
+	}
+
+	private function flush_modules(){
+		foreach ($this->_modules_activated as $key => $module) {
+			if(isset($this->_modules_installed[$key])){
+				$this->_modules_activated[$key] = $this->_modules_installed[$key];
+			}else{
+				unset($this->_modules_activated[$key]);
+			}
+		}
+		update_option( 'avca_modules', $this->_modules_activated );
 	}
 
 	private function is_module_active($module){
