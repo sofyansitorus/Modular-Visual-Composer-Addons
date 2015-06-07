@@ -3,25 +3,28 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
  * Name: AVCA Formidable
+ * Description: Formidable form selector for Visual Composer
+ * Author Name: Sofyan Sitorus
+ * Autor URL: https://github.com/sofyansitorus/
+ * Version: 1.0.0
  */
 
 class AvcaFormidable extends AvcaModule{
 
 	const slug = 'avca_formidable';
+	const base = 'formidable';
 
 	public function __construct(){
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		if ( !is_plugin_active( "formidable/formidable.php" )) {
 			return false;
 		}
 		add_action( 'vc_before_init', array( $this, 'vc_before_init' ) );
-		add_shortcode( self::slug, array( $this, 'build_shortcode' ) );
 	}
 
 	public function vc_before_init(){
 		vc_map( array(
 			'name' => __('AVCA Formidable', AVCA_SLUG),
-			"base" => self::slug,
+			"base" => self::base,
 			"class" => "",
 			"category" => "AVCA",
 				'params' => array(
@@ -29,7 +32,7 @@ class AvcaFormidable extends AvcaModule{
 						'type' => 'dropdown',
 						'class' => '',
 						'heading' => __('Form', AVCA_SLUG),
-						'param_name' => 'form_id',
+						'param_name' => 'id',
 						'value' => $this->get_forms(),
 						'admin_label' => true
 					),
@@ -37,34 +40,23 @@ class AvcaFormidable extends AvcaModule{
 						'type' => 'checkbox',
 						'heading' => __( 'Display form title', AVCA_SLUG ),
 						'param_name' => 'title',
-						'value' => array( __( 'Yes', 'js_composer' ) => '1' )
+						'value' => array( __( 'Yes', 'js_composer' ) => 'true' )
 					),
 					array(
 						'type' => 'checkbox',
 						'heading' => __( 'Display form description', AVCA_SLUG ),
 						'param_name' => 'description',
-						'value' => array( __( 'Yes', 'js_composer' ) => '1' )
+						'value' => array( __( 'Yes', 'js_composer' ) => 'true' )
 					),
 					array(
 						'type' => 'checkbox',
 						'heading' => __( 'Minimize form HTML', AVCA_SLUG ),
 						'param_name' => 'minimize',
-						'value' => array( __( 'Yes', 'js_composer' ) => '1' )
+						'value' => array( __( 'Yes', 'js_composer' ) => 'true' )
 					)
 				)
 			)
 		);
-	}
-
-	public function build_shortcode( $atts, $content = null ){
-		extract(shortcode_atts(array(
-			'form_id' => '',
-			'title' => false,
-			'description' => false,
-			'minimize' => false
-		), $atts));
-
-		return FrmFormsController::get_form_shortcode( array( 'id' => $form_id, 'title' => $title, 'description' => $description, 'minimize' => $minimize ) );;
 	}
 
 	private function get_forms(){

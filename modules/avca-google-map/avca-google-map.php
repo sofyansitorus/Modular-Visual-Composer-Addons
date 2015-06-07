@@ -1,11 +1,18 @@
 <?php
+if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
+
 /*
  * Name: AVCA Google Map
+ * Description: Advanced google map shortcode for Visual Composer
+ * Author Name: Sofyan Sitorus
+ * Autor URL: https://github.com/sofyansitorus/
+ * Version: 1.0.1
  */
 
 class AvcaGoogleMap extends AvcaModule{
 
 	const slug = 'avca_google_map';
+	const base = 'avca_google_map';
 
 	private $load_css;
 	private $load_map_api_js;
@@ -48,7 +55,7 @@ class AvcaGoogleMap extends AvcaModule{
 	public function vc_before_init(){
 		vc_map( array(
 			"name" => __( "AVCA Google Map", AVCA_SLUG ),
-			"base" => self::slug,
+			"base" => self::base,
 			"class" => "",
 			"category" => "AVCA",
 			"params" => array(
