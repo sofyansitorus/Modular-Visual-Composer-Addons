@@ -5,7 +5,7 @@ Advanced Visual Composer Addons is wordpress plugin as addons for Visual Compose
 1. Advanced google map
 1. Formidable form selector
 1. Animated vertical timeline (Coming soon)
-1. Animated fun fact counter (Comming soon)
+1. Animated fun fact counter (Coming soon)
 
 ### How to install the plugin:
 
