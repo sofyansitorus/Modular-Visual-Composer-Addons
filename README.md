@@ -22,7 +22,8 @@ Advanced Visual Composer Addons is wordpress plugin as addons for Visual Compose
 **07.06.2015 - ver 1.0.1**
 
  - Remove custom params, as currently not used yet
- - Google Map Custom styling enhancement. Infowindow arrow now can be customized for position, color and size
+ - Google Map Custom styling enhancement: Infowindow now can has width and height option
+ - Google Map Custom styling enhancement: Infowindow arrow now can be customized for position, color and size
 
 
 **07.06.2015 - ver 1.0.0**
