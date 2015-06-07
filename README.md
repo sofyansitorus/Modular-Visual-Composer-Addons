@@ -3,7 +3,7 @@
 
 ### Features & Elements:  
 1. Advanced google map
-1. Formidable form
+1. Formidable form selector
 1. Vertical Timeline (Coming soon)
 
 **How to install Advanced addons for Visual Composer wordpress plugin**
@@ -27,7 +27,7 @@
  - Create elements as modules, so each elements can be activated/deactivated from backend, each elements also can has own settings page
  - Tweak enqueue script method to enqueue scripts and styles only on page that has shortcode for current module
  - Tweak Google Map Shortcode to enable redirect to url on marker click
- - Add new Element: **Formidable form selector**
+ - Added new Element: **Formidable form selector**
 
 
 **17.03.2015 - ver 0.0.1**
