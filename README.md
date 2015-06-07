@@ -14,12 +14,12 @@
 1. Go to Plugins screen and find the newly uploaded Plugin in the list.
 1. Click Activate Plugin to activate it.
 
-**Change Log**
+**Change Log:**
 
-07.06.2015 - ver 1.0.1
+**07.06.2015 - ver 1.0.1**
 
  - Remove custom params, as currently not used yet
- - Google Map Custom styling enhancement to allow arrow set on infowindow
+ - Google Map Custom styling enhancement. Infowindow arrow now can be customized for position, color and size
 
 
 **07.06.2015 - ver 1.0.0**
