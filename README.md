@@ -16,6 +16,12 @@
 
 **Change Log**
 
+07.06.2015 - ver 1.0.1
+
+ - Remove custom params, as currently not used yet
+ - Google Map Custom styling enhancement to allow arrow set on infowindow
+
+
 07.06.2015 - ver 1.0.0
 
  - Enable elements as modules
