@@ -66,8 +66,6 @@ class AVCA{
 		}
 		$this->_plugin_data = get_plugin_data(__FILE__);
 
-		$this->load_modules();
-
 		$this->_action = isset($_GET['action']) ? sanitize_text_field($_GET['action']) : false;
 		$this->_module = isset($_GET['module']) ? sanitize_text_field($_GET['module']) : false;
 
@@ -93,9 +91,9 @@ class AVCA{
 		// Check ompatibilities
 		if(!$this->is_vc_version_compatible()) return false;
 
-		$this->run_modules();
-
 		$this->setup_localization();
+
+		$this->load_modules(true);
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
@@ -176,7 +174,6 @@ class AVCA{
 	 * Render admin page
 	 */
 	public function render_admin_page(){
-		$this->run_modules();
 	?>
 	<div class="wrap">
 	<h2><?php echo $this->_plugin_data['Name']; ?></h2>
@@ -326,7 +323,7 @@ class AVCA{
 	/**
 	 * Load modules
 	 */
-	private function load_modules(){
+	private function load_modules( $run = false ){
 		$this->_modules_activated = get_option( 'avca_modules', array() );
 		foreach(glob($this->get_module_dir()."/*", GLOB_ONLYDIR) as $dir){
 			$module_name = basename($dir);
@@ -337,6 +334,9 @@ class AVCA{
 					'path' => $module_file
 				);
 			}
+		}
+		if($run){
+			$this->run_modules();
 		}		
 	}
 
@@ -357,11 +357,13 @@ class AVCA{
 	private function activate_module( $module ){
 		$this->_modules_activated[$module] = $this->_modules_installed[$module];
 		update_option( 'avca_modules', $this->_modules_activated );
+		$this->run_modules();
 	}
 
 	private function deactivate_module( $module ){
 		unset($this->_modules_activated[$module]);
 		update_option( 'avca_modules', $this->_modules_activated );
+		$this->run_modules();
 	}
 
 	private function module_data(){
@@ -390,6 +392,7 @@ class AVCA{
 		}
 
 		if( FALSE === get_option( 'avca_first_install_time' ) ){
+			$this->load_modules();
 			if($this->_modules_installed){
 				foreach ( $this->_modules_installed as $key => $value ) {
 					$this->_modules_activated[$key] = $value;
@@ -404,7 +407,6 @@ class AVCA{
 	 * Runs when the plugin is deactivated
 	 */  
 	public function deactivation_hook() {
-		
 	}
 
   
