@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Description: Advanced google map shortcode for Visual Composer
  * Author Name: Sofyan Sitorus
  * Autor URL: https://github.com/sofyansitorus/
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 
 class AvcaGoogleMap extends AvcaModule{
@@ -98,7 +98,7 @@ class AvcaGoogleMap extends AvcaModule{
 				array(
 					'type' => 'textfield',
 					'heading' => __('Height', AVCA_SLUG),
-					'description' => __('Set your map width in % or px. Default is px.', AVCA_SLUG),
+					'description' => __('Set your map height in % or px. Default is px.', AVCA_SLUG),
 					'param_name' => 'height',
 					'admin_label' => true,
 					'value' => '300px',
@@ -230,11 +230,40 @@ class AvcaGoogleMap extends AvcaModule{
 					'group' => __('Info Window', AVCA_SLUG)
 				),
 				array(
+					'type' => 'textfield',
+					'heading' => __('Width', AVCA_SLUG),
+					'description' => __('Set your info window width in px.', AVCA_SLUG),
+					'param_name' => 'info_window_width',
+					'admin_label' => true,
+					'value' => '200px',
+					'group' => __('Info Window', AVCA_SLUG),
+					'dependency' => array(
+						'element' => 'marker_onclick',
+						'value' => array('disabled_infowindow', 'toggle_infowindow')
+					)
+				),
+				array(
+					'type' => 'textfield',
+					'heading' => __('Height', AVCA_SLUG),
+					'description' => __('Set your info window height in px.', AVCA_SLUG),
+					'param_name' => 'info_window_height',
+					'admin_label' => true,
+					'value' => '80px',
+					'group' => __('Info Window', AVCA_SLUG),
+					'dependency' => array(
+						'element' => 'marker_onclick',
+						'value' => array('disabled_infowindow', 'toggle_infowindow')
+					)
+				),
+				array(
 					'type' => 'dropdown',
 					'class' => '',
-					'heading' => __('Type', AVCA_SLUG),
+					'heading' => __('Styling', AVCA_SLUG),
 					'param_name' => 'info_window_type',
-					'value' => array(__('Default', AVCA_SLUG) => 'default', __('Custom', AVCA_SLUG) => 'custom'),
+					'value' => array(
+						__('Default', AVCA_SLUG) => 'default', 
+						__('Custom', AVCA_SLUG) => 'custom'
+					),
 					'dependency' => array(
 						'element' => 'marker_onclick',
 						'value' => array('disabled_infowindow', 'toggle_infowindow')
@@ -242,32 +271,49 @@ class AvcaGoogleMap extends AvcaModule{
 					'group' => __('Info Window', AVCA_SLUG)
 				),
 				array(
-					'type' => 'textfield',
-					'heading' => __('Horizontal Offset Position', AVCA_SLUG),
-					'description' => __('Negative number is allowed. Default is 0.', AVCA_SLUG),
-					'param_name' => 'info_window_h_offset',
-					'value' => '0',
-					'group' => __('Info Window', AVCA_SLUG),
+					'type' => 'dropdown',
+					'class' => '',
+					'heading' => __('Arrow', AVCA_SLUG),
+					'param_name' => 'info_window_arrow',
+					'value' => array(
+						__('Disabled', AVCA_SLUG) => '', 
+						__('Top', AVCA_SLUG) => 'top',
+						__('Right', AVCA_SLUG) => 'right',
+						__('Bottom', AVCA_SLUG) => 'bottom',
+						__('Left', AVCA_SLUG) => 'left'
+					),
 					'dependency' => array(
 						'element' => 'info_window_type',
 						'value' => array('custom')
 					),
+					'group' => __('Info Window', AVCA_SLUG)
 				),
 				array(
+		            'type' => 'colorpicker',
+		            'heading' => __('Arrow Color', AVCA_SLUG),
+		            'param_name' => 'info_window_arrow_color',
+		            'group' => __( 'Info Window', AVCA_SLUG),
+					'dependency' => array(
+						'element' => 'info_window_arrow',
+						'value' => array('top','right','bottom','left')
+					)
+		        ),
+				array(
 					'type' => 'textfield',
-					'heading' => __('Vertical Offset Position', AVCA_SLUG),
-					'description' => __('Negative number is allowed. Default is 0.', AVCA_SLUG),
-					'param_name' => 'info_window_v_offset',
-					'value' => '0',
+					'heading' => __('Arrow Size', AVCA_SLUG),
+					'description' => __('Set arrow size in px unit. Default is 30px.', AVCA_SLUG),
+					'param_name' => 'info_window_arrow_size',
+					'admin_label' => true,
+					'value' => '30px',
 					'group' => __('Info Window', AVCA_SLUG),
 					'dependency' => array(
-						'element' => 'info_window_type',
-						'value' => array('custom')
-					),
+						'element' => 'info_window_arrow',
+						'value' => array('top','right','bottom','left')
+					)
 				),
 				array(
 		            'type' => 'css_editor',
-		            'heading' => __( 'Css', AVCA_SLUG),
+		            'heading' => '',
 		            'param_name' => 'info_window_class',
 		            'group' => __( 'Info Window', AVCA_SLUG),
 					'dependency' => array(
@@ -333,9 +379,12 @@ class AvcaGoogleMap extends AvcaModule{
 			'marker_onclick' => '',
 			'redirect_url' => '#',
 			'info_window_text' => '',
+			'info_window_width' => '200px',
+			'info_window_height' => '80px',
 			'info_window_type' => '',
-			'info_window_h_offset' => 0,
-			'info_window_v_offset' => 0,
+			'info_window_arrow' => '',
+			'info_window_arrow_color' => '#000000',
+			'info_window_arrow_size' => '30px',
 			'info_window_class' => ''
 		), $atts));
 
@@ -403,9 +452,10 @@ class AvcaGoogleMap extends AvcaModule{
 		
 		if($content){
 			$args_marker['info_window_text'] = array('value' => addslashes(preg_replace('#\R+#', '', $content)));
+			$args_marker['info_window_width'] = array('value' => $info_window_width);
+			$args_marker['info_window_height'] = array('value' => $info_window_height);
 			$args_marker['info_window_type'] = array('value' => $info_window_type);
-			$args_marker['info_window_h_offset'] = array('value' => (int)$info_window_h_offset, 'type' => 'integer');
-			$args_marker['info_window_v_offset'] = array('value' => (int)$info_window_v_offset, 'type' => 'integer');
+			$args_marker['info_window_arrow'] = array('value' => $info_window_arrow);
 			$args_marker['info_window_class'] = array('value' => $info_window_class);
 		}
 
@@ -415,6 +465,50 @@ class AvcaGoogleMap extends AvcaModule{
 
 		$output .= '})(jQuery)'."\n";
 		$output .= '</script>'."\n";
+
+		if($info_window_arrow){
+			$output .= '<style type="text/css">'."\n";
+			$output .= '.info-window-custom.has-arrow:after{'."\n";
+			$output .= 'border-width: '.$info_window_arrow_size.';'."\n";
+			$output .= '}'."\n";
+			$output .= '.info-window-custom.has-arrow.'.$info_window_arrow.':after{'."\n";
+			switch ($info_window_arrow) {
+				case 'top':
+					$output .= 'bottom: 100%;'."\n";
+					$output .= 'left: 50%;'."\n";
+					$output .= 'margin-left: -'.$info_window_arrow_size.';'."\n";
+					$output .= 'border-bottom-color: '.$info_window_arrow_color.';'."\n";
+					break;
+
+				case 'right':
+					$output .= 'left: 100%;'."\n";
+					$output .= 'top: 50%;'."\n";
+					$output .= 'margin-top: -'.$info_window_arrow_size.';'."\n";
+					$output .= 'border-left-color: '.$info_window_arrow_color.';'."\n";
+					break;
+
+				case 'bottom':
+					$output .= 'top: 100%;'."\n";
+					$output .= 'left: 50%;'."\n";
+					$output .= 'margin-left: -'.$info_window_arrow_size.';'."\n";
+					$output .= 'border-top-color: '.$info_window_arrow_color.';'."\n";
+					break;
+
+				case 'left':
+					$output .= 'right: 100%;'."\n";
+					$output .= 'top: 50%;'."\n";
+					$output .= 'margin-top: -'.$info_window_arrow_size.';'."\n";
+					$output .= 'border-right-color: '.$info_window_arrow_color.';'."\n";
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+			
+			$output .= '}'."\n";
+			$output .= '</style>'."\n";
+		}
 
 		return $output;
 	}

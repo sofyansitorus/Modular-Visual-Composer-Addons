@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Plugin Name:       Advanced Visual Composer Addons
  * Plugin URI:        https://github.com/sofyansitorus/Advanced-Visual-Composer-Addons
  * Description:       Advanced Addons for <a href="http://goo.gl/QNA0Fb" target="_blank">WPBakery Visual Composer</a>.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Sofyan Sitorus
  * Author URI:        https://github.com/sofyansitorus/
  * Text Domain:       avca
@@ -23,7 +23,6 @@ if ( !defined( 'AVCA_URL' ) )
 if ( !defined( 'AVCA_SLUG' ) )
 	define( 'AVCA_SLUG', 'avca' );
 
-require_once( dirname(__FILE__).'/lib/class-avca-param.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
 
 class AVCA{
@@ -32,15 +31,12 @@ class AVCA{
 	 * Constants
 	 *--------------------------------------------*/
 	const module_dir = 'modules';
-	const param_dir = 'params';
 	const min_vc_version = '4.0';
 
 	/**
 	 * Single Instance
 	 */
 	private static $_instance = null;
-	
-	private $_params = array();
 
 	private $_modules_activated = array();
 	private $_modules_installed = array();
@@ -301,18 +297,6 @@ class AVCA{
 	}
 
 	/**
-	 * Load params
-	 */
-	public function load_params(){
-		foreach(glob($this->get_param_dir()."/*", GLOB_ONLYDIR) as $dir){
-			$param_file = trailingslashit($dir).basename($dir).'.php';
-			if(file_exists($param_file)){
-				//require_once($param_file);
-			}
-		}
-	}
-
-	/**
 	 * Load modules
 	 */
 	private function load_modules(){
@@ -410,13 +394,6 @@ class AVCA{
 	private function is_vc_version_compatible() {
 		if( !defined('WPB_VC_VERSION') ) return false;
 		return version_compare( WPB_VC_VERSION,  self::min_vc_version, '>' );
-	}
-
-	/**
-	 * Get params directory
-	 */
-	protected function get_param_dir(){
-		return untrailingslashit( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . self::param_dir;	
 	}
 
 	/**

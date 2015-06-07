@@ -1,11 +1,13 @@
-.avca-google-map-wrapper{
-	border: 0;
-	margin: 0;
-	padding: 0;
+.info-window-custom.has-arrow {
+	position: relative;
 }
-.info-window-custom {
-	font-size: 14px;
-}
-.info-window-default {
-	font-size: 14px;
+
+.info-window-custom.has-arrow:after {
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(213, 30, 73, 0);
 }
