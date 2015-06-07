@@ -44,7 +44,7 @@ class AVCA{
 	private $_module;
 	private $_action;
 
-	public $_plugin_data = array();
+	private $_plugin_data = array();
 	
 	/**
 	 * Get Instance
@@ -64,7 +64,7 @@ class AVCA{
 		if( !function_exists( 'get_plugin_data' ) ){
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		$this->plugin_data = get_plugin_data(__FILE__);
+		$this->_plugin_data = get_plugin_data(__FILE__);
 
 		$this->load_modules();
 
@@ -162,7 +162,7 @@ class AVCA{
 	 */
 	public function add_admin_page(){
 		add_menu_page( 
-			$this->plugin_data['Name'], 
+			$this->_plugin_data['Name'], 
 			'AVCA', 
 			'manage_options', 
 			AVCA_SLUG, 
@@ -179,7 +179,7 @@ class AVCA{
 		$this->run_modules();
 	?>
 	<div class="wrap">
-	<h2><?php echo $this->plugin_data['Name']; ?></h2>
+	<h2><?php echo $this->_plugin_data['Name']; ?></h2>
 	<ul class="subsubsub">
 		<li class="all"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG), admin_url( 'admin.php' )) ;?>">All <span class="count">(<?php echo count($this->_modules_installed); ?>)</span></a> |</li>
 		<li class="active"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG, 'filter' => 'active'), admin_url( 'admin.php' )) ;?>">Active <span class="count">(<?php echo count($this->_modules_activated); ?>)</span></a> |</li>
@@ -320,7 +320,7 @@ class AVCA{
 	 * Setup localization
 	 */
 	public function setup_localization() {
-		load_plugin_textdomain( $this->plugin_data['TextDomain'], false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+		load_plugin_textdomain( AVCA_SLUG, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 	}
 
 	/**
