@@ -1,5 +1,5 @@
 ### Advanced Visual Composer Addons
-**Advanced Visual Composer Addons is wordpress plugin as addons for Visual Composer wordpress plugin:**
+Advanced Visual Composer Addons is wordpress plugin as addons for Visual Composer wordpress plugin. The plugin has been designed and created as modular for the flexibility to allow each elements can be activated/deactivated from backend, and each elements also can has own settings page.
 
 ### Features & Elements:  
 1. Advanced google map
