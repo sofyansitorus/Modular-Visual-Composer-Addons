@@ -13,7 +13,8 @@ Advanced Visual Composer Addons is wordpress plugin as addons for Visual Compose
 1. With your FTP program, upload the Plugin folder to the wp-content/plugins folder in your WordPress directory online.
 1. Go to Plugins screen and find the newly uploaded Plugin in the list.
 1. Click Activate Plugin to activate it.
-2. Click the **AVCA** menu to activate/deactivate and change settings for available modules.
+1. Click the **AVCA** menu to activate/deactivate and change settings for available modules.
+1. That's It, now you will see a new category "AVCA" appear on Visual composer editor panel. Click the AVCA category to use the AVCA elements.
 
 ### Change Log:
 
