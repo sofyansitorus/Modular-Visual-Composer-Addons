@@ -13,6 +13,7 @@
 1. With your FTP program, upload the Plugin folder to the wp-content/plugins folder in your WordPress directory online.
 1. Go to Plugins screen and find the newly uploaded Plugin in the list.
 1. Click Activate Plugin to activate it.
+2. Click the **AVCA** menu to activate/deactivate and change settings for available modules.
 
 **Change Log:**
 
