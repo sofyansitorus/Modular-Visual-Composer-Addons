@@ -6,7 +6,7 @@
 1. Formidable form selector
 1. Vertical Timeline (Coming soon)
 
-**How to install Advanced addons for Visual Composer wordpress plugin**
+### How to install the plugin:
 
 1. Download the plugin zip file to your desktop.
 1. If downloaded as a zip archive, extract the Plugin folder to your desktop.
@@ -15,7 +15,7 @@
 1. Click Activate Plugin to activate it.
 2. Click the **AVCA** menu to activate/deactivate and change settings for available modules.
 
-**Change Log:**
+### Change Log:
 
 **07.06.2015 - ver 1.0.1**
 
