@@ -220,14 +220,13 @@ class AVCA{
 				if(!$show){
 					continue;
 				}
+
 				$name = (!empty($module['data']['name'])) ? $module['data']['name'] : $key;
 				$description = (!empty($module['data']['description'])) ? $module['data']['description'] : __('No description available', AVCA_SLUG);
-				$version = (!empty($module['data']['version'])) ? $module['data']['version'] : $this->plugin_data['Version'];
-				$author_name = (!empty($module['data']['author_name'])) ? $module['data']['author_name'] : $this->plugin_data['Author'];
-				$author_url = (!empty($module['data']['author_url'])) ? $module['data']['author_url'] : $this->plugin_data['AuthorURI'];
+
 				$row_actions = array();
 				if($this->is_module_active($key)){
-					$row_actions[] = sprintf('<span class="deactivate"><a href="%s">%s</a></span>', 
+					$row_actions['deactivate'] = sprintf('<span class="deactivate"><a href="%s">%s</a></span>', 
 						wp_nonce_url( 
 							add_query_arg( 
 								array(
@@ -243,13 +242,13 @@ class AVCA{
 					);
 					$row_class = 'active';
 				}else{
-					$row_actions[] = sprintf('<span class="activate"><a href="%s">%s</a></span>', 
+					$row_actions['activate'] = sprintf('<span class="activate"><a href="%s">%s</a></span>', 
 						wp_nonce_url( 
 							add_query_arg( 
 								array(
 									'page' => AVCA_SLUG,
 									'module' => $key,
-									'action' => 'activate'
+									'action' => 'activate',
 								),
 								admin_url( 'admin.php' )
 							), 
@@ -262,6 +261,32 @@ class AVCA{
 				if($this->is_module_active($key)){
 					$row_actions = apply_filters('avca_module_row_actions', $row_actions, $key);
 				}
+				
+				$row_metas = array();
+				$version = (!empty($module['data']['version'])) ? $module['data']['version'] : false;
+				if($version){
+					$row_metas['version'] = sprintf('<span class="version">%s %s</span>', 
+						__('Version', AVCA_SLUG),
+						$version
+					);
+				}
+				$author_name = (!empty($module['data']['author_name'])) ? $module['data']['author_name'] : false;
+				$author_url = (!empty($module['data']['author_url'])) ? $module['data']['author_url'] : false;
+				if($author_name){
+					if($author_url){
+						$row_metas['author'] = sprintf('<span class="author">%s <a href="%s">%s</a></span>', 
+							__('By', AVCA_SLUG),
+							$author_url, 
+							$author_name
+						);
+					}else{
+						$row_metas['author'] = sprintf('<span class="author">%s %s</span>', 
+							__('By', AVCA_SLUG),
+							$author_name
+						);
+					}
+				}
+				$row_metas = apply_filters('avca_module_row_metas', $row_metas, $key);
 			?>
 			<tr id="advanced-visual-composer-addons" class="<?php echo $row_class; ?>" data-slug="">
 				<td class="plugin-title"><strong><?php echo $name; ?></strong>
@@ -271,7 +296,9 @@ class AVCA{
 				</td>
 				<td class="column-description desc">
 					<div class="plugin-description"><p><?php echo $description; ?></p></div>
-					<div class="active second plugin-version-author-uri"><?php _e('Version', AVCA_SLUG); ?> <?php echo $version; ?> | By <a href="<?php echo $author_url; ?>"><?php echo $author_name; ?></a></div>
+					<div class="row-metas visible">
+					<?php echo implode( " | ", $row_metas ); ?>
+					</div>
 				</td>
 			</tr>
 			<?php

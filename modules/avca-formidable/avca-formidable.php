@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Name: AVCA Formidable
  * Description: Formidable form selector for Visual Composer
  * Author Name: Sofyan Sitorus
- * Autor URL: https://github.com/sofyansitorus/
+ * Author URL: https://github.com/sofyansitorus/
  * Version: 1.0.0
  */
 

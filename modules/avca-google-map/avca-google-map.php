@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Name: AVCA Google Map
  * Description: Advanced google map shortcode for Visual Composer
  * Author Name: Sofyan Sitorus
- * Autor URL: https://github.com/sofyansitorus/
+ * Author URL: https://github.com/sofyansitorus/
  * Version: 1.0.2
  */
 
@@ -534,8 +534,8 @@ class AvcaGoogleMap extends AvcaModule{
 
 	public function add_row_actions($actions, $module){
 		if('avca-google-map' == $module){
-			$actions[] = $this->create_row_actions_link(
-				'setting', 
+			$actions['settings'] = $this->create_row_actions_link(
+				'settings', 
 				add_query_arg( 
 					array(
 						'page' => self::slug,
