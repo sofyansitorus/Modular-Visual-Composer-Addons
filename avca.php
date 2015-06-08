@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Plugin Name:       Advanced Visual Composer Addons
  * Plugin URI:        https://github.com/sofyansitorus/Advanced-Visual-Composer-Addons
  * Description:       Advanced Addons for <a href="http://goo.gl/QNA0Fb" target="_blank">WPBakery Visual Composer</a>.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Author:            Sofyan Sitorus
  * Author URI:        https://github.com/sofyansitorus/
  * Text Domain:       avca
@@ -353,8 +353,8 @@ final class AVCA extends AvcaBase{
 		if(!$this->is_module_active( $module )){
 			$this->_modules_activated[$module] = $this->_modules_installed[$module];
 			$this->save_activated_modules( );
-			$this->run_modules();
 			$this->add_admin_notice('updated', __('Module activated.', AVCA_SLUG));
+			$this->run_modules();
 			do_action('avca_module_activated', $module, $this->_modules_activated[$module]);
 			return true;
 		}else{
@@ -366,9 +366,9 @@ final class AVCA extends AvcaBase{
 		if($this->is_module_active( $module )){
 			unset($this->_modules_activated[$module]);
 			$this->save_activated_modules( );
-			$this->run_modules();
 			$this->add_admin_notice('updated', __('Module deactivated.', AVCA_SLUG));
 			do_action('avca_module_deactivated', $module, $this->_modules_activated[$module]);
+			$this->run_modules();
 			return true;
 		}else{
 			return false;

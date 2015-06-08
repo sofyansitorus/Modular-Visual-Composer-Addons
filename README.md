@@ -20,7 +20,13 @@ Advanced Visual Composer Addons is wordpress plugin as addons for Visual Compose
 
 ### Change Log:
 
-**08.06.2015 - ver 1.0.1**
+**09.06.2015 - ver 1.1.2**
+
+ - Add AvcaBase class
+ - Add avca_module_activated action hook
+ - Add avca_module_deactivated action hook
+
+**08.06.2015 - ver 1.1.1**
 
  - Create new element: Text Dropcap
 
