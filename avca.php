@@ -367,6 +367,7 @@ final class AVCA extends AvcaBase{
 			$this->save_activated_modules( );
 			$this->run_modules();
 			$this->add_admin_notice('updated', __('Module deactivated.', AVCA_SLUG));
+			do_action('avca_module_activated', $module, $this->_modules_activated[$module]);
 			return true;
 		}else{
 			return false;
