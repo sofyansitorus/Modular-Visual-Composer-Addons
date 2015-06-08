@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
-abstract class AvcaModule {
+abstract class AvcaModule extends AvcaBase {
 
 	protected function create_row_actions_link($class, $url, $label){
 		return sprintf('<span class="%s"><a href="%s">%s</a></span>',

@@ -23,9 +23,10 @@ if ( !defined( 'AVCA_URL' ) )
 if ( !defined( 'AVCA_SLUG' ) )
 	define( 'AVCA_SLUG', 'avca' );
 
+require_once( dirname(__FILE__).'/lib/class-avca-base.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
 
-class AVCA{
+final class AVCA extends AvcaBase{
 
 	/*--------------------------------------------*
 	 * Constants
@@ -43,6 +44,8 @@ class AVCA{
 
 	private $_module;
 	private $_action;
+
+	private $_admin_page;
 
 	private $_plugin_data = array();
 	
@@ -99,86 +102,43 @@ class AVCA{
 
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
-		add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
 	}
 
 	public function admin_init(){
 		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : false;
-		if($nonce){
-			switch ($this->_action) {
-
-				case 'activate':
-						if( wp_verify_nonce( $nonce, 'activate_module' ) && $this->_module ) {
-							$this->activate_module($this->_module);
-						}else{
-							wp_die( __('Invalid request!', AVCA_SLUG) );
-						}
-					break;
-
-				case 'deactivate':
-						if( wp_verify_nonce( $nonce, 'deactivate_module' ) && $this->_module ) {
-							$this->deactivate_module($this->_module);
-						}else{
-							wp_die( __('Invalid request!', AVCA_SLUG) );
-						}
-					break;
-
-				case 'flush_modules':
-						if( wp_verify_nonce( $nonce, 'flush_modules' ) ) {
-							$this->flush_modules();
-						}else{
-							wp_die( __('Invalid request!', AVCA_SLUG) );
-						}
-					break;
-				
-				default:
-					# code...
-					break;
-			}
-		}
-	}
-
-	/**
-	 * Add menu page
-	 */
-	public function admin_notices(){
 
 		switch ($this->_action) {
 
-			case 'activate':
-					if($this->_module && $this->is_module_active($this->_module)){	
-						echo '<div class="updated"><p>'; 
-				        echo __('Module activated.', AVCA_SLUG);
-				        echo "</p></div>";
+			case 'activate_module':
+					if( wp_verify_nonce( $nonce, 'activate_module' ) && $this->_module ) {
+						$this->activate_module($this->_module);
+					}else{
+						wp_die( __('Invalid request!', AVCA_SLUG) );
 					}
 				break;
 
-			case 'deactivate':
-					if($this->_module && !$this->is_module_active($this->_module)){
-						echo '<div class="updated"><p>'; 
-				        echo __('Module deactivated.', AVCA_SLUG);
-				        echo "</p></div>";
-			    	}
-				break;
-
-			case 'flush_modules':
-					echo '<div class="updated"><p>'; 
-				    echo __('Modules flushed.', AVCA_SLUG);
-				    echo "</p></div>";
+			case 'deactivate_module':
+					if( wp_verify_nonce( $nonce, 'deactivate_module' ) && $this->_module ) {
+						$this->deactivate_module($this->_module);
+					}else{
+						wp_die( __('Invalid request!', AVCA_SLUG) );
+					}
 				break;
 			
 			default:
 				# code...
 				break;
 		}
+
 	}
 
 	/**
 	 * Add admin page
 	 */
-	public function add_admin_page(){
-		add_menu_page( 
+	public function admin_menu(){
+		$this->_admin_page = add_menu_page( 
 			$this->_plugin_data['Name'], 
 			'AVCA', 
 			'manage_options', 
@@ -187,6 +147,8 @@ class AVCA{
 			'', 
 			75
 		);
+
+		add_action('load-'.$this->_admin_page, array($this, 'flush_modules'));
 	}
 
 	/**
@@ -195,7 +157,7 @@ class AVCA{
 	public function render_admin_page(){
 	?>
 	<div class="wrap">
-	<h2><?php echo $this->_plugin_data['Name']; ?><a href="<?php echo wp_nonce_url(add_query_arg(array('page' => AVCA_SLUG, 'action' => 'flush_modules'), admin_url( 'admin.php' ) ), 'flush_modules'); ?>" class="add-new-h2"><?php _e('Flush Modules', AVCA_SLUG); ?></a></h2>
+	<h2><?php echo $this->_plugin_data['Name']; ?></h2>
 	<ul class="subsubsub">
 		<li class="all"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG), admin_url( 'admin.php' )) ;?>">All <span class="count">(<?php echo count($this->_modules_installed); ?>)</span></a> |</li>
 		<li class="active"><a href="<?php echo add_query_arg(array('page' => AVCA_SLUG, 'filter' => 'active'), admin_url( 'admin.php' )) ;?>">Active <span class="count">(<?php echo count($this->_modules_activated); ?>)</span></a> |</li>
@@ -248,7 +210,7 @@ class AVCA{
 								array(
 									'page' => AVCA_SLUG,
 									'module' => $key,
-									'action' => 'deactivate'
+									'action' => 'deactivate_module'
 								),
 								admin_url( 'admin.php' )
 							), 
@@ -264,7 +226,7 @@ class AVCA{
 								array(
 									'page' => AVCA_SLUG,
 									'module' => $key,
-									'action' => 'activate',
+									'action' => 'activate_module',
 								),
 								admin_url( 'admin.php' )
 							), 
@@ -363,21 +325,24 @@ class AVCA{
 		foreach ($this->_modules_activated as $key => $module) {
 			if(file_exists($module['path'])){
 				require_once($module['path']);
-			}else{
-				unset($this->_modules_activated[$key]);
 			}
 		}
 	}
 
-	private function flush_modules(){
+	public function flush_modules(){
 		foreach ($this->_modules_activated as $key => $module) {
-			if(isset($this->_modules_installed[$key])){
+			if(isset($this->_modules_installed[$key]) && file_exists($module['path'])){
 				$this->_modules_activated[$key] = $this->_modules_installed[$key];
 			}else{
 				unset($this->_modules_activated[$key]);
+				$this->add_admin_notice('error', sprintf(__('The module %s has been deactivated due to an error: Module file does not exist.', AVCA_SLUG), $module['data']['name']));
 			}
 		}
-		update_option( 'avca_modules', $this->_modules_activated );
+		$this->save_activated_modules(  );
+	}
+
+	private function save_activated_modules(){
+		return update_option( 'avca_modules', $this->_modules_activated );
 	}
 
 	private function is_module_active($module){
@@ -385,17 +350,32 @@ class AVCA{
 	}
 
 	private function activate_module( $module ){
-		$this->_modules_activated[$module] = $this->_modules_installed[$module];
-		update_option( 'avca_modules', $this->_modules_activated );
-		$this->run_modules();
+		if(!$this->is_module_active( $module )){
+			$this->_modules_activated[$module] = $this->_modules_installed[$module];
+			$this->save_activated_modules( );
+			$this->run_modules();
+			$this->add_admin_notice('updated', __('Module activated.', AVCA_SLUG));
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	private function deactivate_module( $module ){
-		unset($this->_modules_activated[$module]);
-		update_option( 'avca_modules', $this->_modules_activated );
-		$this->run_modules();
+		if($this->is_module_active( $module )){
+			unset($this->_modules_activated[$module]);
+			$this->save_activated_modules( );
+			$this->run_modules();
+			$this->add_admin_notice('updated', __('Module deactivated.', AVCA_SLUG));
+			return true;
+		}else{
+			return false;
+		}
 	}
 
+	/**
+	 * Get modules header data
+	 */
 	private function module_data(){
 		return array(
 			'name' => 'Name', 
@@ -404,6 +384,13 @@ class AVCA{
 			'author_name' => 'Author Name',
 			'author_url' => 'Author URL'
 		);
+	}
+
+	/**
+	 * Get modules directory
+	 */
+	private function get_module_dir(){
+		return untrailingslashit( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . self::module_dir;	
 	}
   
 	/**
@@ -428,7 +415,7 @@ class AVCA{
 					$this->_modules_activated[$key] = $value;
 				}
 			}
-			update_option( 'avca_modules', $this->_modules_activated );
+			$this->save_activated_modules( );
 			update_option( 'avca_first_install_time', current_time('timestamp') );
 		}
 	}
@@ -453,13 +440,6 @@ class AVCA{
 	private function is_vc_version_compatible() {
 		if( !defined('WPB_VC_VERSION') ) return false;
 		return version_compare( WPB_VC_VERSION,  self::min_vc_version, '>' );
-	}
-
-	/**
-	 * Get modules directory
-	 */
-	protected function get_module_dir(){
-		return untrailingslashit( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . self::module_dir;	
 	}
   
 } // end class

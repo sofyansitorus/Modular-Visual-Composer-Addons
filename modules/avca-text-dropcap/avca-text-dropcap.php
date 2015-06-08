@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
  * Name: AVCA Text Dropcap
- * Description: Formidable form selector for Visual Composer
+ * Description: Text Dropcap shortcode for Visual Composer
  * Author Name: Sofyan Sitorus
  * Author URL: https://github.com/sofyansitorus/
  * Version: 1.0.0
