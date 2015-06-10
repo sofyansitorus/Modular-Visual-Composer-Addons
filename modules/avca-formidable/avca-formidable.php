@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  * Description: Formidable form selector for Visual Composer
  * Author Name: Sofyan Sitorus
  * Author URL: https://github.com/sofyansitorus/
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 
 class AvcaFormidable extends AvcaModule{
@@ -19,6 +19,7 @@ class AvcaFormidable extends AvcaModule{
 			return false;
 		}
 		add_action( 'vc_before_init', array( $this, 'vc_before_init' ) );
+		add_shortcode( self::base, array( $this, 'build_shortcode' ) );
 	}
 
 	public function vc_before_init(){
@@ -53,10 +54,31 @@ class AvcaFormidable extends AvcaModule{
 						'heading' => __( 'Minimize form HTML', AVCA_SLUG ),
 						'param_name' => 'minimize',
 						'value' => array( __( 'Yes', 'js_composer' ) => 'true' )
+					),
+					array(
+						'type' => 'textfield',
+						'heading' => __('Custom CSS Class', AVCA_SLUG),
+						'param_name' => 'custom_css_class',
+						'value' => ''
 					)
 				)
 			)
 		);
+	}
+
+	public function build_shortcode( $atts, $content = null ){		
+		extract(shortcode_atts(array(		
+			'id' => '',		
+			'title' => false,		
+			'description' => false,		
+			'minimize' => false,
+			'custom_css_class' => ''		
+		), $atts));		
+		
+		$output = '<div class="avca-formidable '.$custom_css_class.'">';
+		$output .= FrmFormsController::get_form_shortcode( array( 'id' => $id, 'title' => $title, 'description' => $description, 'minimize' => $minimize ) );
+		$output .= '</div>';
+		return $output;		
 	}
 
 	private function get_forms(){
