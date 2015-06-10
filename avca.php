@@ -138,14 +138,12 @@ final class AVCA extends AvcaBase{
 	 * Add admin page
 	 */
 	public function admin_menu(){
-		$this->_admin_page = add_menu_page( 
+		$this->_admin_page = add_options_page( 
 			$this->_plugin_data['Name'], 
 			'AVCA', 
 			'manage_options', 
 			AVCA_SLUG, 
-			array($this, 'render_admin_page'), 
-			'', 
-			75
+			array($this, 'render_admin_page')
 		);
 
 		add_action('load-'.$this->_admin_page, array($this, 'flush_modules'));
