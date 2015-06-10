@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
- * Name: AVCA Text Dropcap
+ * AVCA Module: AVCA Text Dropcap
  * Description: Text Dropcap shortcode for Visual Composer
  * Author Name: Sofyan Sitorus
  * Author URL: https://github.com/sofyansitorus/

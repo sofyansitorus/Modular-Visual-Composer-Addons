@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
- * Name: AVCA Google Map
+ * AVCA Module: AVCA Google Map
  * Description: Advanced google map shortcode for Visual Composer
  * Author Name: Sofyan Sitorus
  * Author URL: https://github.com/sofyansitorus/

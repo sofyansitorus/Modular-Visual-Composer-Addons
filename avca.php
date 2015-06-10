@@ -15,13 +15,14 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
  */
 
 if ( !defined( 'AVCA_PATH' ) )
-	define( 'AVCA_PATH', plugin_dir_url( __FILE__ ) );
+	define( 'AVCA_PATH', plugin_dir_path( __FILE__ ) );
 
 if ( !defined( 'AVCA_URL' ) )
 	define( 'AVCA_URL', plugin_dir_url( __FILE__ ) );
 
 if ( !defined( 'AVCA_SLUG' ) )
 	define( 'AVCA_SLUG', 'avca' );
+
 
 require_once( dirname(__FILE__).'/lib/class-avca-base.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
@@ -106,6 +107,9 @@ final class AVCA extends AvcaBase{
 
 	}
 
+	/**
+	 * Run on admin_init action
+	 */
 	public function admin_init(){
 		$nonce = isset($_REQUEST['_wpnonce']) ? $_REQUEST['_wpnonce'] : false;
 
@@ -291,45 +295,51 @@ final class AVCA extends AvcaBase{
 	</div>
 	<?php
 	}
-  
-	/**
-	 * Setup localization
-	 */
-	public function setup_localization() {
-		load_plugin_textdomain( AVCA_SLUG, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
-	}
 
 	/**
 	 * Load modules
 	 */
 	private function load_modules( $run = false ){
+
 		$this->_modules_activated = get_option( 'avca_modules', array() );
+
 		foreach(glob($this->get_module_dir()."/*", GLOB_ONLYDIR) as $dir){
-			$module_name = basename($dir);
-			$module_file = trailingslashit($dir).$module_name.'.php';
-			if(file_exists($module_file)){
-				$this->_modules_installed[$module_name] = array(
-					'data' => get_file_data($module_file, $this->module_data()),
-					'path' => $module_file
-				);
+			$module_dir = basename($dir);
+			foreach(glob($dir."/*.php") as $module_file){
+				$file_data = get_file_data($module_file, $this->get_module_data());
+				if(!empty($file_data['name'])){
+					$this->_modules_installed[$module_dir] = array(
+						'data' => $file_data,
+						'file' => basename($module_file)
+					);
+					break;
+				}
 			}
 		}
+
 		if($run){
 			$this->run_modules();
-		}		
+		}
+
 	}
 
+	/**
+	 * Run all activated modules
+	 */
 	private function run_modules(){
 		foreach ($this->_modules_activated as $key => $module) {
-			if(file_exists($module['path'])){
-				require_once($module['path']);
+			if($this->is_module_exists($key, $module['file'])){
+				require_once( $this->get_module_path($key, $module['file']) );
 			}
 		}
 	}
 
+	/**
+	 * Flush activated modules data
+	 */
 	public function flush_modules(){
 		foreach ($this->_modules_activated as $key => $module) {
-			if(isset($this->_modules_installed[$key]) && file_exists($module['path'])){
+			if(isset($this->_modules_installed[$key]) && $this->is_module_exists($key, $module['file'])){
 				$this->_modules_activated[$key] = $this->_modules_installed[$key];
 			}else{
 				unset($this->_modules_activated[$key]);
@@ -339,14 +349,37 @@ final class AVCA extends AvcaBase{
 		$this->save_activated_modules(  );
 	}
 
+	/**
+	 * Save all activated modules data to database
+	 */
 	private function save_activated_modules(){
 		return update_option( 'avca_modules', $this->_modules_activated );
 	}
 
-	private function is_module_active($module){
-		return isset($this->_modules_activated[$module]);
+	/**
+	 * Delete all activated modules data from database
+	 */
+	private function delete_activated_modules(){
+		return delete_option( 'avca_modules' );
 	}
 
+	/**
+	 * Check if module is activated
+	 */
+	private function is_module_active($module){
+		return isset( $this->_modules_activated[$module] );
+	}
+
+	/**
+	 * Check if module file is exists
+	 */
+	private function is_module_exists($dir, $file){
+		return file_exists( $this->get_module_path( $dir, $file ) );
+	}
+
+	/**
+	 * Activate module
+	 */
 	private function activate_module( $module ){
 		if(!$this->is_module_active( $module )){
 			$this->_modules_activated[$module] = $this->_modules_installed[$module];
@@ -360,6 +393,9 @@ final class AVCA extends AvcaBase{
 		}
 	}
 
+	/**
+	 * Deactivate module
+	 */
 	private function deactivate_module( $module ){
 		if($this->is_module_active( $module )){
 			unset($this->_modules_activated[$module]);
@@ -374,23 +410,30 @@ final class AVCA extends AvcaBase{
 	}
 
 	/**
+	 * Get modules base directory
+	 */
+	private function get_module_dir(){
+		return AVCA_PATH . DIRECTORY_SEPARATOR . self::module_dir . DIRECTORY_SEPARATOR;	
+	}
+
+	/**
+	 * Get module file path
+	 */
+	private function get_module_path( $dir, $file ){
+		return $this->get_module_dir() . $dir . DIRECTORY_SEPARATOR . $file;	
+	}
+
+	/**
 	 * Get modules header data
 	 */
-	private function module_data(){
+	private function get_module_data(){
 		return array(
-			'name' => 'Name', 
+			'name' => 'AVCA Module', 
 			'description' => 'Description', 
 			'version' => 'Version',
 			'author_name' => 'Author Name',
 			'author_url' => 'Author URL'
 		);
-	}
-
-	/**
-	 * Get modules directory
-	 */
-	private function get_module_dir(){
-		return untrailingslashit( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . self::module_dir;	
 	}
   
 	/**
@@ -440,6 +483,13 @@ final class AVCA extends AvcaBase{
 	private function is_vc_version_compatible() {
 		if( !defined('WPB_VC_VERSION') ) return false;
 		return version_compare( WPB_VC_VERSION,  self::min_vc_version, '>' );
+	}
+  
+	/**
+	 * Setup localization
+	 */
+	public function setup_localization() {
+		load_plugin_textdomain( AVCA_SLUG, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
 	}
   
 } // end class
