@@ -20,6 +20,10 @@ Advanced Visual Composer Addons is wordpress plugin as addons for Visual Compose
 
 ### Change Log:
 
+**11.06.2015 - ver 1.1.4**
+
+ - Bug Fix: Error on module deactivation
+
 **11.06.2015 - ver 1.1.2**
 
  - Move admin menu location as submenu of Settings menu
