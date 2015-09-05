@@ -27,6 +27,12 @@ if ( !defined( 'AVCA_SLUG' ) )
 require_once( dirname(__FILE__).'/lib/class-avca-base.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
 
+function loadCssAndJs() {
+	wp_register_style( 'avca_style', plugins_url('assets/avca.css', __FILE__) );
+	wp_enqueue_style( 'avca_style' );
+}
+loadCssAndJs();
+
 final class AVCA extends AvcaBase{
 
 	/*--------------------------------------------*
