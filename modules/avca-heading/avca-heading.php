@@ -63,12 +63,7 @@ class AvcaHeading extends AvcaModule{
 										        'line_height',
 										        'color',
 										        'font_style',
-										        'background-attachment',
-										        'font_size_description' => __('Heading font size.', AVCA_SLUG),
-										        'line_height_description' => __('Heading line height.', AVCA_SLUG),
-										        'color_description' => __('Heading color.','js_composer'),
-										        'font_style_description' => __('Heading style.', AVCA_SLUG),
-										        'background-attachment' => __('Background attachment.', AVCA_SLUG)
+										        'font_family',
 										    	),
 											),
 					),
@@ -90,7 +85,7 @@ class AvcaHeading extends AvcaModule{
 						"heading"		=> __( "Background Clip", AVCA_SLUG ),
 						"param_name"	=> "background_clip",
 						"value" 		=> array(__("Yes, please", AVCA_SLUG) => 'avca-heading'),
-						"description"	=> __( "Selecting background-size : cover from category positioning will override AVCA Heading styles", AVCA_SLUG ),
+						"description"	=> __( "Selecting background-size from tab positioning will override some of AVCA Heading styles", AVCA_SLUG ),
 					),
 
 					array(
