@@ -1,0 +1,24 @@
+/*
+ * Custom CSS AVCA based elements
+ */
+
+.avca-heading {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+}
+.background-fixed {
+	background-attachment: fixed;
+	background-position: center;
+}
+
+/* in case bootstrap is not enqueued */
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+.text-right {
+	text-align: right;
+}
