@@ -7,12 +7,18 @@
     -webkit-text-fill-color: transparent;
     background-position: center;
 }
-
-.text-center {
-	text-align: center;
-}
-
 .background-fixed {
 	background-attachment: fixed;
 	background-position: center;
+}
+
+/* in case bootstrap is not enqueued */
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+.text-right {
+	text-align: right;
 }

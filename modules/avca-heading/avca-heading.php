@@ -98,12 +98,12 @@ class AvcaHeading extends AvcaModule{
 											),
 					),
 
-					array(
-						"type"			=> "checkbox",
-						"heading"		=> __( "Would you like some shadow?", AVCA_SLUG ),
-						"param_name"	=> "mega_heading_shadow",
-						"value"			=> array(__("Yes, please", AVCA_SLUG ) => 'mega-heading-shadow'),
-					),
+					// array(
+					// 	"type"			=> "checkbox",
+					// 	"heading"		=> __( "Would you like some shadow?", AVCA_SLUG ),
+					// 	"param_name"	=> "mega_heading_shadow",
+					// 	"value"			=> array(__("Yes, please", AVCA_SLUG ) => 'mega-heading-shadow'),
+					// ),
 
 					array(
 						"type"			=> "textfield",
