@@ -5,10 +5,14 @@
 .avca-heading {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-size: cover;
     background-position: center;
 }
 
 .text-center {
 	text-align: center;
+}
+
+.background-fixed {
+	background-attachment: fixed;
+	background-position: center;
 }

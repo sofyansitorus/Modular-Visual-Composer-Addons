@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 /*
  * AVCA Module: AVCA Heading
  * Description: Custom heading experiment
- * Author Name: Sofyan Sitorus
- * Author URL: https://github.com/sofyansitorus/
- * Version: Waiting pull request
+ * Author Name: Nikko Khresna
+ * Author URL: https://github.com/nikhresna/
+ * Version: 1.0
  */
 
 class AvcaHeading extends AvcaModule{
@@ -22,16 +22,17 @@ class AvcaHeading extends AvcaModule{
 	public function vc_before_init(){
 		vc_map(
 			array(
-				"name"  		=> __( "Avca Heading" ),
+				"name"  		=> __( "Avca Heading", AVCA_SLUG ),
 				"base" 			=> self::base,
 				"class" 		=> "heading",
-	            "icon" => plugins_url('assets/icon.png', __FILE__), // or css class name which you can reffer in your css file later. Example: "vc_extend_my_class"
+	            "icon" => plugins_url('assets/icon.png', __FILE__),
 				"custom_markup" => "",
+				"category"		=> "AVCA",
 				"params" 		=> array(
 					array(
 						"type"  		=> "textfield",
 						"class" 		=> "",
-						"heading" 		=> __( "Heading Text" ),
+						"heading" 		=> __( "Heading Text", AVCA_SLUG ),
 						"param_name" 	=> "heading_text",
 						"admin_label"	=> "true",
 						"value"			=> "lorem",
@@ -49,112 +50,90 @@ class AvcaHeading extends AvcaModule{
 												"H4" => "h4",
 												"H5" => "h5",
 												"H6" => "h6"
-											)
-					),
-
-					array(
-						"type"  		=> "textfield",
-						"class" 		=> "",
-						"heading" 		=> __( "Heading Size" ),
-						"param_name" 	=> "heading_size",
-						"description"	=> "You must input the px/em/vh/whatever-font-size-your-browser-can-render.",
-					),
-
-					array(
-						"type"			=> "checkbox",
-						"heading"		=> "Background Clip",
-						"param_name"	=> "background_clip",
-						"value" 		=> array(__("Yes, please", "js_composer") => 'avca-heading'),
-						"description"	=> "Recommended font size for this option is =>100px",
-					),
-
-					array(
-						"type"			=> "attach_image",
-						"heading"		=> "Background Clip Image",
-						"param_name"	=> "background_clip_image",
-						"value"			=> "",
-					),
-
-					array(
-						"type"			=> "dropdown",
-						"heading"		=> "Background Clip Attachment",
-						"param_name"	=> "background_clip_attachment",
-						"value"			=> array(
-												"scroll" => "",
-												"fixed"	=> "fixed",
 											),
 					),
 
 					array(
-						"type"			=> "checkbox",
-						"heading"		=> "Would you like some shadow?",
-						"param_name"	=> "mega_heading_shadow",
-						"value"			=> array(__("Yes, please", "js_composer") => 'mega-heading-shadow'),
-					),
-
-					array(
-						"type"			=> "textfield",
-						"heading"		=> "Custom Element Class",
-						"param_name"	=> "custom_class",
-						"value"			=> "",
-						"description"	=> "Extra class for further modification written in you css file",
-					),
-
-					array(
-						"type"			=> "textfield",
-						"heading"		=> "Custom Element Id",
-						"param_name"	=> "custom_id",
-						"value"			=> "",
-						"description"	=> "Extra id for further modification written in you css file",
+						'type'			=> 'font_container',
+						'param_name'	=> 'font_container',
+						'value'			=> '',
+						'settings'		=>array(
+										    'fields'=>array(
+										        'font_size',
+										        'line_height',
+										        'color',
+										        'font_style',
+										        'background-attachment',
+										        'font_size_description' => __('Heading font size.', AVCA_SLUG),
+										        'line_height_description' => __('Heading line height.', AVCA_SLUG),
+										        'color_description' => __('Heading color.','js_composer'),
+										        'font_style_description' => __('Heading style.', AVCA_SLUG),
+										        'background-attachment' => __('Background attachment.', AVCA_SLUG)
+										    	),
+											),
 					),
 
 					array(
 						"type"			=> "dropdown",
-						"heading"		=> "Text Align",
+						"heading"		=> __( "Text Align", AVCA_SLUG),
 						"param_name"	=> "text_align",
 						"value"			=> array(
 												"Left" => "text-left",
 												"Center" => "text-center",
 												"Right" => "text-right"
 											),
-						"group"			=> "Positioning",
+
+					),
+
+					array(
+						"type"			=> "checkbox",
+						"heading"		=> __( "Background Clip", AVCA_SLUG ),
+						"param_name"	=> "background_clip",
+						"value" 		=> array(__("Yes, please", AVCA_SLUG) => 'avca-heading'),
+						"description"	=> __( "Selecting background-size : cover from category positioning will override AVCA Heading styles", AVCA_SLUG ),
+					),
+
+					array(
+						"type"			=> "dropdown",
+						"heading"		=> __( "Background Clip Attachment", AVCA_SLUG ),
+						"param_name"	=> "background_clip_attachment",
+						"value"			=> array(
+												"scroll" => "",
+												"fixed"	=> "background-fixed",
+											),
+					),
+
+					array(
+						"type"			=> "checkbox",
+						"heading"		=> __( "Would you like some shadow?", AVCA_SLUG ),
+						"param_name"	=> "mega_heading_shadow",
+						"value"			=> array(__("Yes, please", AVCA_SLUG ) => 'mega-heading-shadow'),
 					),
 
 					array(
 						"type"			=> "textfield",
-						"class"			=> "",
-						"heading"		=> "Padding top",
-						"param_name"	=> "padding_top",
-						"description"	=> "Use of px/em/else is a must",
-						"group"			=> "Positioning",
+						"heading"		=> __( "Custom Element Class", AVCA_SLUG ),
+						"param_name"	=> "custom_class",
+						"value"			=> "",
+						"description"	=> __( "Extra class for further modification written in your css file", AVCA_SLUG ),
 					),
 
 					array(
 						"type"			=> "textfield",
-						"class"			=> "",
-						"heading"		=> "Padding right",
-						"param_name"	=> "padding_right",
-						"group"			=> "Positioning",
-						"description"	=> "Use of px/em/else is must",
+						"heading"		=> __( "Custom Element Id", AVCA_SLUG ),
+						"param_name"	=> "custom_id",
+						"value"			=> "",
+						"description"	=> __( "Extra id for further modification written in your css file", AVCA_SLUG ),
 					),
 
-					array(
-						"type"			=> "textfield",
-						"class"			=> "",
-						"heading"		=> "Padding bottom",
-						"param_name"	=> "padding_bottom",
-						"group"			=> "Positioning",
-						"description"	=> "Use of px/em/else is must",
-					),
 
 					array(
-						"type"			=> "textfield",
-						"class"			=> "",
-						"heading"		=> "Padding left",
-						"param_name"	=> "padding_left",
+						'type'			=> 'css_editor',
+						'heading'		=> __( 'Heading Styling', AVCA ),
+						'param_name'	=> 'heading_class',
 						"group"			=> "Positioning",
-						"description"	=> "Use of px/em/else is must",
-					),
+			        ),
+
 				)
 			)
 		);
@@ -163,7 +142,7 @@ class AvcaHeading extends AvcaModule{
 	public function build_shortcode( $atts ) {
 		extract(
 			shortcode_atts( array(
-				'text_align'	=> 'text-left',
+				'text_align'	=> 'text-center',
 				'background_clip'	=> '',
 				'background_clip_image' => '',
 				'background_clip_attachment' => '',
@@ -172,15 +151,17 @@ class AvcaHeading extends AvcaModule{
 				'mega_heading_shadow'		=> '',
 				'heading_type'	=> 'h2',
 				'heading_text'	=> '',
-				'heading_size'	=> '',
-				'padding_top'	=> '',
-				'padding_right'	=> '',
-				'padding_bottom'	=> '',
-				'padding_left'	=> '',
-				'row_type'		=> '',
+				'font_container' => '',
+				'heading_class' => ''
 			), $atts )
 		);
 		
+		$heading_class = apply_filters( 
+			VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, 
+			vc_shortcode_custom_css_class( $heading_class, '' ), 
+			self::slug, 
+			$atts
+		);
 
 		/*
 			add ' style="" ' to holder if necessary
@@ -268,21 +249,17 @@ class AvcaHeading extends AvcaModule{
 		
 		// declare property to be put in ' style="" '
 		$styles = array(
-				'font-size'	=> $heading_size,
-				'padding-top'	=> $padding_top,
-				'padding-right'	=> $padding_right,
-				'padding-bottom'	=> $padding_bottom,
-				'padding-left'	=> $padding_left,
-				'background-image'	=> $background_clip_image,
-				'background-attachment'	=> $background_clip_attachment,
+				'font_container'	=> $font_container,
 		);
 
 		// declare class to be put ' class="" '
 		$classes = array(
+				'background-attachment'	=> $background_clip_attachment,
 				'text-align'	=> $text_align,
 				'background_clip'	=> $background_clip,
 				'mega_heading_shadow'	=> $mega_heading_shadow,
 				'custom-class'	=> $custom_class,
+				'heading_class'		=> $heading_class,
 		);
 
 		// declare id to be put ' id="" '
@@ -295,10 +272,64 @@ class AvcaHeading extends AvcaModule{
 		$element_style 	= output_style( $styles );
 		$element_class 	= output_class( $classes );
 
+		$font_container_obj = new Vc_Font_Container();
+		$font_container_data = $font_container_obj->_vc_font_container_parse_attributes(
+			array(
+				'font_size',
+				'line_height',
+				'color',
+				'font_style_italic',
+				'font_style_bold',
+				'background_attachment',
+			), 
+			$font_container 
+		);
 
+		$styles = array();
+		if ( ! empty( $font_container_data ) && isset( $font_container_data['values'] ) ) {
+			foreach ( $font_container_data['values'] as $key => $value ) {
+				if ( $key != 'tag' && strlen( $value ) > 0 ) {
+					if ( preg_match( '/description/', $key ) ) {
+						continue;
+					}
+					if ( $key == 'font_size' || $key == 'line_height' ) {
+						$value = preg_replace( '/\s+/', '', $value );
+					}
+					if ( $key == 'font_size' ) {
+						$pattern = '/^(\d*(?:\.\d+)?)\s*(px|\%|in|cm|mm|em|rem|ex|pt|pc|vw|vh|vmin|vmax)?$/';
+						// allowed metrics: http://www.w3schools.com/cssref/css_units.asp
+						$regexr = preg_match( $pattern, $value, $matches );
+						$value = isset( $matches[1] ) ? (float) $matches[1] : (float) $value;
+						$unit = isset( $matches[2] ) ? $matches[2] : 'px';
+						$value = $value . $unit;
+					}
+					if ( strlen( $value ) > 0 ) {
+						if(array_key_exists($key, $font_container_data['fields'])){
+							switch ($key) {
+								case 'font_style_italic':
+										if($value == 1){
+											$styles[$key] = 'font-style: italic';
+										}
+									break;
+
+								case 'font_style_bold':
+										if($value == 1){
+											$styles[$key] = 'font-weight: bold';
+										}
+									break;
+								
+								default:
+										$styles[$key] = str_replace( '_', '-', $key ) . ': ' . $value;
+									break;
+							}
+						}
+					}
+				}
+			}
+		}
 		$output = '';
 		$output .= '
-			<'. $heading_type .' '. $element_id .' '. $element_class .' '. $element_style .' >'. $heading_text .'</ '. $heading_type. ' >
+			<'. $heading_type .' '. $element_id .' '. $element_class .' style=" '.implode("; ", $styles).' ">'. $heading_text .'</ '. $heading_type. ' >
 		';
 		return $output;
 	}
