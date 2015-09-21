@@ -28,7 +28,12 @@ require_once( dirname(__FILE__).'/lib/class-avca-base.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
 
 function loadCssAndJs() {
-	wp_register_style( 'avca_style', plugins_url('assets/avca.css', __FILE__) );
+	// enqueue icons
+	wp_register_style( 'icons_font', plugins_url( '/assets/fonts.css', __FILE__ ) );
+	wp_enqueue_style( 'icons_font' );
+	
+	// enqueue style
+	wp_register_style( 'avca_style', plugins_url( '/assets/avca.css', __FILE__ ) );
 	wp_enqueue_style( 'avca_style' );
 }
 loadCssAndJs();
