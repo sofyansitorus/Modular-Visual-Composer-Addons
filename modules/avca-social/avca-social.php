@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
  * AVCA Module: AVCA Social
- * Description: Social media schortcode
+ * Description: Social media profile link
  * Author Name: Nikko Khresna
  * Author URL: https://github.com/nikhresna/
  * Version: 1.0.0
@@ -45,8 +45,11 @@ class AvcaSocial extends AvcaModule{
 			  			"description" => __( "Background for each icons", AVCA_SLUG ),
 			  			"group" => __( "Mods", AVCA_SLUG ),
 			  			"value" => array(
-			  					__( "circle", AVCA_SLUG ) => "circle",
-			  					__( "circle outline", AVCA_SLUG ) => "circle-outline"
+			  					__( "Default", AVCA_SLUG ) => "",
+			  					__( "Circle", AVCA_SLUG ) => "circle-soc",
+			  					__( "Circle outline", AVCA_SLUG ) => "circle-outline-soc",
+			  					__( "Boxed", AVCA_SLUG ) => "boxed-soc",
+			  					__( "Boxed outline", AVCA_SLUG ) => "boxed-outline-soc"
 			  				)
 			  		),
 
@@ -378,15 +381,12 @@ class AvcaSocial extends AvcaModule{
 
 		extract(shortcode_atts( array(
 			'el_class' => '',
-			'orientation' => 'vertical-social'
+			'orientation' => 'vertical-social',
+			'background' => '',
 		), $atts ) );
-
-		// $el_class = $this->getExtraClass($el_class);
-
-		// $class = setClass(array('avca-social', $el_class));
 		
-		$output .= '<div class="'.$el_class.' '.$orientation.'">
-					<ul class="social-icons">';
+		$output .= '<div class="'.$el_class.' '.$orientation.' '.$background.'">
+					<ul class="avca-socials">';
 
 		if( isset( $atts['px'] ) )
 		$output .= '<li><a href="' . $atts['px'] . '" target="_blank"><i class="font-icon-social-500px"></i></a></li>';
