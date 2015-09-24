@@ -36,3 +36,17 @@
 .boxed-outline-soc a {
 	border: 1px solid #333;
 }
+
+/* Avca Doughnut */
+.avca-doughnut {
+	text-align: center;
+}
+.avca-doughnut canvas{
+    left: 50%;
+    transform: translatex(-50%);
+    position: absolute;
+}
+.avca-doughnut-text {
+	text-align: center;
+	display: block;
+}
