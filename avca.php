@@ -27,16 +27,22 @@ if ( !defined( 'AVCA_SLUG' ) )
 require_once( dirname(__FILE__).'/lib/class-avca-base.php' );
 require_once( dirname(__FILE__).'/lib/class-avca-module.php' );
 
-function loadCssAndJs() {
-	// enqueue icons
+// enqueue & register icons (entypo, entypo socials, steadyicons, lineicons, icons)
+function load_avca_icons() {
 	wp_register_style( 'icons_font', plugins_url( '/assets/fonts.css', __FILE__ ) );
-	wp_enqueue_style( 'icons_font' );
-	
-	// enqueue style
-	wp_register_style( 'avca_style', plugins_url( '/assets/avca.css', __FILE__ ) );
-	wp_enqueue_style( 'avca_style' );
+	wp_enqueue_style( 'icons_font' );		
 }
-loadCssAndJs();
+load_avca_icons();
+
+// enqueue & register default css if user defined not found
+if( !function_exists( load_avca_style ) ) {
+	function load_avca_style() {
+		// enqueue style
+		wp_register_style( 'avca_style', plugins_url( '/assets/avca.css', __FILE__ ) );
+		wp_enqueue_style( 'avca_style' );
+	}
+}
+load_avca_style();
 
 final class AVCA extends AvcaBase{
 
