@@ -3,6 +3,8 @@ jQuery(document).ready(function($){
 		if( $( '.avca-doughnut' ).length > 0 ){
 			var chart = $( '.avca-doughnut' );
 		
+			// ---------------------
+			// fetch value from html
 			$( chart ).each( function() {
 				$( this ).fadeIn( function() {
 					var currentChart = $(this),
@@ -12,17 +14,18 @@ jQuery(document).ready(function($){
 						currentTrackColor = currentChart.attr( 'data-trackcolor' );
 						currentStyle = currentChart.attr( 'data-barstyle' );
 						currentChart.easyPieChart({
-						animate: 1000,
-						barColor: currentBgColor,
-						trackColor: currentTrackColor,
-						lineWidth: currentLine,
-						size: currentSize,
-						lineCap: currentStyle,
-						scaleColor: false,
-					});
+							animate: 1000,
+							barColor: currentBgColor,
+							trackColor: currentTrackColor,
+							lineWidth: currentLine,
+							size: currentSize,
+							lineCap: currentStyle,
+							scaleColor: false,
+						});
 				});
 			});
-		}	
+
+		} // end if
 	};
 
 	doughnutChart();

@@ -367,9 +367,9 @@ class AvcaSocial extends AvcaModule{
 
 					array(
 				      	"type" => "textfield",
-				      	"heading" => __( "Extra class name", AVCA_SLUG ),
+				      	"heading" => __( "Extra Class Name", AVCA_SLUG ),
 				      	"param_name" => "el_class",
-				      	"description" => __( "If you wish to style particular content element differently, then use this field to add a class name and then refer to it in your css file.", AVCA_SLUG )
+				      	"description" => __( "Extra class to be customized via CSS", AVCA_SLUG )
 					    )
 				  	)
 				));

@@ -3,11 +3,12 @@ if ( ! defined( 'ABSPATH' ) )  exit; // Exit if accessed directly
 
 /*
  * AVCA Module: AVCA Doughnut Chart
- * Description: AVCA doughnut chart
+ * Description: Doughnut chart using canvas.
  * Author Name: Nikko Khresna
  * Author URL: https://github.com/nikhresna/
  * Version: 1.0.0
  */
+
 class AvcaDoughnutChart extends AvcaModule {
 	const slug = 'avca_doughnut_chart';
 	const base = 'avca_doughnut_chart';
@@ -25,14 +26,14 @@ class AvcaDoughnutChart extends AvcaModule {
 					
 					array(
 						"type" => "dropdown",
-						"heading" => __( "Circular Progress Type", AVCA_SLUG ),
-						"param_name" => "check_circular_type",
+						"heading" => __( "Chart type", AVCA_SLUG ),
+						"param_name" => "check_doughnut_type",
 						"value" => array(
 										__( "With Icon", AVCA_SLUG ) => "icon_mode", 
 										__( "Custom Field", AVCA_SLUG ) => "field_mode",
-										__( "Animated Percentage", AVCA_SLUG ) => "ani_percentage",
+										__( "Percentage", AVCA_SLUG ) => "percentage",
 									),
-						"description" => __( "Select the type of your circular progress.", AVCA_SLUG ),
+						"description" => __( "Select the type of the chart.", AVCA_SLUG ),
 						"admin_label" => false
 					),
 
@@ -44,14 +45,16 @@ class AvcaDoughnutChart extends AvcaModule {
 							__( "No Icon", AVCA_SLUG ) => "no_icon", 
 							__( "Yes, Display Icon", AVCA_SLUG ) => "custom_icon",
 						),
-						"description" => __( "Should an icon be displayed at the left side of the progress bar.", AVCA_SLUG ),
+						"description" => __( "Show icon in the chart?", AVCA_SLUG ),
 						"admin_label" => false,
 						"dependency" => Array(
-											'element' => "check_circular_type",
+											'element' => "check_doughnut_type",
 											'value' => array( 'icon_mode' ),
 											),
 					),
 
+					// ---------------------
+					// icons from entypo, entypo socials, steadyicons, lineicons, icons
 					array(
 						"type" => "dropdown",
 						"heading" => __( "Icon", AVCA_SLUG ),
@@ -1028,23 +1031,23 @@ class AvcaDoughnutChart extends AvcaModule {
 
 					array(
 						"type" => "dropdown",
-						"heading" => __( "Icon Color", AVCA_SLUG ),
+						"heading" => __( "Icon color", AVCA_SLUG ),
 						"param_name" => "icon_color",
 						"value" => array(
-										__( "Theme Color Default", AVCA_SLUG ) => "",
-										__( "Custom Color", AVCA_SLUG ) => "custom"
+										__( "Theme color default", AVCA_SLUG ) => "",
+										__( "Custom color", AVCA_SLUG ) => "custom"
 									),
-						"description" => __( "Choose a color for your icon.", AVCA_SLUG ),
+						"description" => __( "Color type for the icon.", AVCA_SLUG ),
 						"admin_label" => false,
 						"dependency" => Array(
-											'element' => "check_circular_type",
+											'element' => "check_doughnut_type",
 											'value' => array( 'icon_mode ' ),
 											)
 					),
 
 					array(
 						"type" => "colorpicker",
-						"heading" => __( "Icon Custom Color", AVCA_SLUG ),
+						"heading" => __( "Icon custom color", AVCA_SLUG ),
 						"param_name" => "custom_icon_color",
 						"description" => __( "Select custom color for icon.", AVCA_SLUG ),
 						"dependency" => Array(
@@ -1053,89 +1056,91 @@ class AvcaDoughnutChart extends AvcaModule {
 											),
 					),
 					
-					// Field
+					// ---------------------
+					// check_doughnut_type == field_mode
 					array(
 						"type" => "textfield",
-						"heading" => __( "Circular Progress Bar Field", AVCA_SLUG ),
-						"param_name" => "circular_field",
-						"description" => __( "Enter the Circular Progress Bar Field title here.", AVCA_SLUG ),
+						"heading" => __( "Chart bar text", AVCA_SLUG ),
+						"param_name" => "doughnut_text",
+						"description" => __( "Title for the chart.", AVCA_SLUG ),
 						"admin_label" => false,
 						"dependency" => Array( 
-											'element' => "check_circular_type",
+											'element' => "check_doughnut_type",
 											'value' => array( 'field_mode' ),
 											),
 					),
 
 					array(
 						"type" => "dropdown",
-						"heading" => __( "Field Color", AVCA_SLUG ),
-						"param_name" => "field_color",
+						"heading" => __( "Field color", AVCA_SLUG ),
+						"param_name" => "doughnut_text_color",
 						"value" => array(
-										__( "Theme Color Default", AVCA_SLUG ) => "",
-										__( "Custom Color", AVCA_SLUG ) => "custom",
+										__( "Theme color default", AVCA_SLUG ) => "",
+										__( "Custom color", AVCA_SLUG ) => "custom",
 									),
-						"description" => __( "Choose a color for your field.", AVCA_SLUG ),
+						"description" => __( "Color type for the title.", AVCA_SLUG ),
 						"admin_label" => false,
 						"dependency" => Array(
-											'element' => "check_circular_type",
+											'element' => "check_doughnut_type",
 											'value' => array( 'field_mode' ),
 											)
 					),
 
 					array(
 						"type" => "colorpicker",
-						"heading" => __( "Field Custom Color", AVCA_SLUG ),
-						"param_name" => "custom_field_color",
-						"description" => __( "Select custom color for field text.", AVCA_SLUG ),
+						"heading" => __( "Test custom color", AVCA_SLUG ),
+						"param_name" => "custom_doughnut_text_color",
+						"description" => __( "Select custom color the text.", AVCA_SLUG ),
 						"dependency" => Array(
-											'element' => "field_color",
+											'element' => "doughnut_text_color",
 											'value' => array('custom'),
 											),
 					),
 
-					// Percentage
+					// ---------------------
+					// check_doughnut_type == percentage
 					array(
 						"type" => "textfield",
-						"heading" => __( "Circular Progress in %", AVCA_SLUG ),
-						"param_name" => "circular_percentage",
-						"description" => __( "Enter a number between 0 and 100.", AVCA_SLUG ),
+						"heading" => __( "Chart percentage", AVCA_SLUG ),
+						"param_name" => "doughnut_percentage",
+						"description" => __( "Percentage for the bar.", AVCA_SLUG ),
 						"admin_label" => false
 					),
 
 					array(
 						"type" => "textfield",
-						"heading" => __( "TextField", AVCA_SLUG ),
-						"param_name" => "circular_percentage_text",
-						"description" => __( "Enter a text.", AVCA_SLUG ),
+						"heading" => __( "Text", AVCA_SLUG ),
+						"param_name" => "doughnut_percentage_text",
+						"description" => __( "Text will be displayed under the chart.", AVCA_SLUG ),
 						"value" => "Text",
 						"admin_label" => false,
 						"dependency" => Array(
-											'element' => "check_circular_type",
-											'value' => array( 'ani_percentage' ),
+											'element' => "check_doughnut_type",
+											'value' => array( 'percentage' ),
 											),
 					),
 
 					array(
 						"type" => "dropdown",
-						"heading" => __( "Percentage Text Color", AVCA_SLUG ),
+						"heading" => __( "Percentage text color", AVCA_SLUG ),
 						"param_name" => "percentage_color",
 						"value" => array(
-										__( "Theme Color Default", AVCA_SLUG ) => "",
-										__( "Custom Color", AVCA_SLUG ) => "custom" ,
+										__( "Theme color default", AVCA_SLUG ) => "",
+										__( "Custom color", AVCA_SLUG ) => "custom" ,
 									),
-						"description" => __( "Choose a color for your percentage text.", AVCA_SLUG ),
+						"description" => __( "Color type for your percentage text.", AVCA_SLUG ),
 						"admin_label" => false,
 						"dependency" => Array(
-											'element' => "check_circular_type",
-											'value' => array('ani_percentage' ),
+											'element' => "check_doughnut_type",
+											'value' => array('percentage' ),
 											),
 					),
 
 					array(
 						"type" => "colorpicker",
-						"heading" => __( "Percentage Animate Text Custom Color", AVCA_SLUG ),
+						"heading" => __( "Percentage Color", AVCA_SLUG ),
 						"param_name" => "custom_percentage_color",
-						"description" => __( "Select custom color for animate percentage text.", AVCA_SLUG ),
+						"description" => __( "Color for percentage number.", AVCA_SLUG ),
 						"dependency" => Array(
 											'element' => "percentage_color",
 											'value' => array( 'custom' ),
@@ -1144,54 +1149,62 @@ class AvcaDoughnutChart extends AvcaModule {
 
 					array(
 						"type" => "colorpicker",
-						"heading" => __( "Percentage Text Custom Color", AVCA_SLUG ),
+						"heading" => __( "Percentage Text Color", AVCA_SLUG ),
 						"param_name" => "custom_percentage_text_color",
 						"value" => "#000000",
-						"description" => __( "Select custom color for percentage text.", AVCA_SLUG ),
+						"description" => __( "Color for percentage text.", AVCA_SLUG ),
 						"dependency" => Array(
 											'element' => "percentage_color",
 											'value' => array( 'custom' ),
 											),
 					),
 
-					// Circular Graph Settings
+					// ---------------------
+					// settings
 					array(
-						"type" => "colorpicker",
-						"heading" => __( "Circular Bar Color", AVCA_SLUG ),
-						"param_name" => "circular_bgcolor",
-						"value" => "#2ABB9B",
-						"description" => __( "Select custom color for circular bar.", AVCA_SLUG ),
+						"type" => "textfield",
+						"heading" => __( "Font & Icon size", AVCA_SLUG ),
+						"param-name" => "font_size",
+						"description" => __( "Size of the text & icon for the chart.( default = 30px )", AVCA_SLUG ),
 					),
 
 					array(
 						"type" => "colorpicker",
-						"heading" => __( "Circular Track Color", AVCA_SLUG ),
-						"param_name" => "circular_trackcolor",
+						"heading" => __( "Bar Color", AVCA_SLUG ),
+						"param_name" => "bar_color",
+						"value" => "#2ABB9B",
+						"description" => __( "Color fot the bar.", AVCA_SLUG ),
+					),
+
+					array(
+						"type" => "colorpicker",
+						"heading" => __( "Track Color", AVCA_SLUG ),
+						"param_name" => "bartrack_color",
 						"value" => "#EBEDEF",
-						"description" => __( "Select custom color of the track for the bar.", AVCA_SLUG ),
+						"description" => __( "Color for the track of the bar.", AVCA_SLUG ),
 					),
 
 					array(
 						"type" => "textfield",
-						"heading" => __( "Circular Progress Size", AVCA_SLUG ),
-						"param_name" => "circular_size",
-						"description" => __( "Enter a number for the size of your circle progress in px. Default size is 170.", AVCA_SLUG ),
+						"heading" => __( "Chart Size", AVCA_SLUG ),
+						"param_name" => "bar_size",
+						"description" => __( "Size of the chart.( default = 170 )", AVCA_SLUG ),
 						"admin_label" => false,
 					),
 
 					array(
 						"type" => "textfield",
-						"heading" => __( "Line Width Circle Progress", AVCA_SLUG ),
-						"param_name" => "circular_line",
-						"description" => __( "Enter a number for the width of the bar line in px. Default size is 6.", AVCA_SLUG ),
+						"heading" => __( "Bar Width", AVCA_SLUG ),
+						"param_name" => "bar_width",
+						"description" => __( "Width for the bar.( default = 6 )", AVCA_SLUG ),
 						"admin_label" => false,
 					),
 
 					array(
 						"type" => "dropdown",
-						"heading" => __( "Circular bar style", AVCA_SLUG ),
+						"heading" => __( "Bar edge style", AVCA_SLUG ),
 						"param_name" => "line_style",
-						"description" => __( "Select for round/butt/square bar" ),
+						"description" => __( "Shape for the corners of the bar" ),
 						"value" => array(
 										__( "Round", AVCA_SLUG ) => "round",
 										__( "Butt", AVCA_SLUG ) => "butt",
@@ -1203,12 +1216,12 @@ class AvcaDoughnutChart extends AvcaModule {
 						"type" => "textfield",
 						"heading" => __( "Extra class name", AVCA_SLUG ),
 						"param_name" => "el_class",
-						"description" => __( "If you wish to style particular content element differently, then use this field to add a class name and then refer to it in your css file.", AVCA_SLUG ),
+						"description" => __( "Extra class to be customized via CSS.", AVCA_SLUG ),
 					),
 
 				)
-		));
-	}
+		)); // end vc_map
+	} // end vc_before_init
 
 	public function build_shortcode( $atts ) {		
 		
@@ -1218,52 +1231,52 @@ class AvcaDoughnutChart extends AvcaModule {
 		wp_register_script( 'avca-doughnut-js', AVCA_URL . 'modules/avca-doughnut-chart/assets/avca-doughnut.js', 'jquery', 1.0, true );
 		wp_enqueue_script( 'avca-doughnut-js' );
 
-		$output = $el_class = $check_circular_type = $checkicon = $icon = $icon_color = $custom_icon_color = $circular_field = $field_color = $custom_field_color = $circular_percentage = $circular_percentage_text = $percentage_color = $custom_percentage_color = $custom_percentage_text_color = $circular_bgcolor = $circular_trackcolor = $circular_size = $circular_line = '';
+		$output = $el_class = $check_doughnut_type = $checkicon = $icon = $icon_color = $custom_icon_color = $doughnut_text = $doughnut_text_color = $custom_doughnut_text_color = $doughnut_percentage = $doughnut_percentage_text = $percentage_color = $custom_percentage_color = $custom_percentage_text_color = $bar_color = $bartrack_color = $bar_size = $bar_width = '';
 
 		extract( shortcode_atts( array(
 			'el_class' => '',
-			'check_circular_type' => '',
+			'check_doughnut_type' => '',
 			'checkicon' => '',
 			'icon' => '',
 			'icon_color' => '',
 			'custom_icon_color' => '',
-			'circular_field' => '',
-			'field_color' => '',
-			'custom_field_color' => '',
-			'circular_percentage' => '',
-			'circular_percentage_text' => '',
+			'doughnut_text' => '',
+			'doughnut_text_color' => '',
+			'custom_doughnut_text_color' => '',
+			'doughnut_percentage' => '',
+			'doughnut_percentage_text' => '',
 			'percentage_color' => '',
 			'custom_percentage_color' => '',
 			'custom_percentage_text_color' => '',
-			'circular_bgcolor' => '',
-			'circular_trackcolor' => '',
-			'circular_size' => '',
-			'circular_line' => '',
+			'font_size' => '30',
+			'bar_color' => '',
+			'bartrack_color' => '',
+			'bar_size' => '',
+			'bar_width' => '',
 			'line_style' => 'round',
 		), $atts ) );
 
 		// ---------------------
 		// set default
-		if( !empty( $circular_size ) ) {
-			$size_output = $circular_size;
+		if( !empty( $bar_size ) ) {
+			$size_output = $bar_size;
 		} else {
 			$size_output = 170;
 		}
 
-		if( !empty( $circular_line ) ) {
-			$line_output = $circular_line;
+		if( !empty( $bar_width ) ) {
+			$line_output = $bar_width;
 		} else {
 			$line_output = 6;
 		}
 
 		// ---------------------
 		// variable to output
-		$circular_output = null;
+		$doughnut_output = null;
 		$color_icon = null;
 		$color_field = null;
 		$color_percentage = null;
 		$color_text_percentage = null;
-		$circular_animate_text_output = null;
 
 		// ---------------------
 		// colors
@@ -1271,40 +1284,42 @@ class AvcaDoughnutChart extends AvcaModule {
 			$color_icon = ' style="color: '.$custom_icon_color.';" ';
 		}
 
-		if ( $field_color =="custom" ) { 
-			$color_field = ' style="color: '.$custom_field_color.';" ';
+		if ( $doughnut_text_color =="custom" ) { 
+			$color_field = ' style="color: '.$custom_doughnut_text_color.';" ';
 		}
 
 		if ( $percentage_color == "custom" ) { 
-			$color_percentage = ' style="color: '.$custom_percentage_color.'; width: '.$size_output.'px; height: '.$size_output.'px;" ';  
+			$color_percentage = ' style="color: '.$custom_percentage_color.';" ';  
 			$color_text_percentage = ' style="color: '.$custom_percentage_text_color.';" ';
 		}
 
 		// ---------------------
 		// output text
-		if ( $check_circular_type == "field_mode" ) { 
-			$circular_output = '<span class="field-text"'.$color_field.'>'.$circular_field.'</span>';  
+		if ( $check_doughnut_type == "field_mode" ) { 
+			$doughnut_output = '<span class="field-text"'.$color_field.'>'.$doughnut_text.'</span>';  
 		}
 
-		if ( $check_circular_type == "ani_percentage" ) { 
-			$circular_output = '<span class="percentage no-field"'.$color_percentage.'>'.$circular_percentage.'</span>';
-			$circular_text_output = '<span class="avca-doughnut-text"'.$color_text_percentage.'>'.$circular_percentage_text.'</span>';  
+		if ( $check_doughnut_type == "percentage" ) { 
+			$doughnut_output = '<span class="percentage no-field"'.$color_percentage.'>'.$doughnut_percentage.'</span>';
+			$circular_text_output = '<span class="avca-doughnut-text"'.$color_text_percentage.'>'.$doughnut_percentage_text.'</span>';
 		}
 
 		// ---------------------
 		// output icon
-		if ( $check_circular_type == "icon_mode" && $checkicon == "custom_icon" ) { $circular_output = '<span class="field-icon"'.$color_icon.'><i class="'.$icon.'"></i></span>'; }
+		if ( $check_doughnut_type == "icon_mode" && $checkicon == "custom_icon" ) { 
+			$doughnut_output = '<span class="field-icon"'.$color_icon.'><i class="'.$icon.'"></i></span>'; 
+		}
 
 		// ---------------------
 		// output chart
-		$output .= '<div'.$class.'>';
-		$output .= '<div class="avca-doughnut" data-barstyle="'.$line_style.'" data-bgcolor="'.$circular_bgcolor.'" data-trackcolor ="'.$circular_trackcolor.'" data-size="'.$size_output.'" data-line="'.$line_output.'" data-percent="'.$circular_percentage.'" style="line-height: '.$size_output.'px;">'.$circular_output.'</div>';
+		$output .= '<div'.$class.' style="font-size: '.$font_size.'px;">';
+		$output .= '<div class="avca-doughnut" data-barstyle="'.$line_style.'" data-bgcolor="'.$bar_color.'" data-trackcolor ="'.$bartrack_color.'" data-size="'.$size_output.'" data-line="'.$line_output.'" data-percent="'.$doughnut_percentage.'" style="line-height: '.$size_output.'px;">'.$doughnut_output.'</div>';
 		$output .= $circular_text_output;
 		$output .= '</div>';
 
 		// ---------------------
 		// output output
 		return $output;
-	}
+	} // build_shortcode
 }
 new AvcaDoughnutChart();
